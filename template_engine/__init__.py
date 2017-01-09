@@ -40,6 +40,17 @@ class GroupNode:
         return content
 
 
+class IncludeNode:
+    def __init__(self, filename):
+        self.filename = filename
+
+    def eval(self, context):
+
+        with open(self.filename) as f:
+            return f.read()
+
+
+
 class Parser:
     def __init__(self, tokens):
         self._tokens = tokens
@@ -65,10 +76,14 @@ class Parser:
         else:
             return False
 
+    def _consume_whitespace(self):
+        while self.peek() == ' ':
+            self.next()
+
     def parse(self):
         node = self._parse_group()
         if not self.is_finished():
-            raise Exception('Extra content found at end of input!')
+            raise TemplateError('Extra content found at end of input!')
         return node
 
     def _parse_group(self):
@@ -80,12 +95,27 @@ class Parser:
     def _parse_node(self):
         if self.try_consume("{{"):
             return self._parse_python()
+        elif self.try_consume("{%"):
+            return self._parse_tag()
         else:
             return self._parse_text()
 
+    def _parse_tag(self):
+        self._consume_whitespace()
+        if self.try_consume(self, 'include'):
+            return self._parse_include()
+        else:
+            raise TemplateError('unknown tag')
+
+    def _parse_include(self):
+        self._consume_whitespace()
+        if not self.try_consume('\''):
+            raise TemplateError('expected \' after include')
+        # This is where we stopped
+
     def _parse_text(self):
         content = ""
-        while self.peek() != "{" and self.peek() is not None:
+        while self.peek(2) not in ("{{", "{%") and self.peek() is not None:
             content += self.peek()
             self.next()
         return TextNode(content)
@@ -94,7 +124,7 @@ class Parser:
         content = ""
         while not self.try_consume("}}"):
             if self.is_finished():
-                raise TemplateError
+                raise TemplateError('reached end of file while trying to pass python, expected "}}"')
             content += self.peek()
             self.next()
         return PythonNode(content)
