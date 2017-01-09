@@ -1,14 +1,25 @@
-def render(template, context={}):
+def render(template, context):
     parser = Parser(template)
     node = parser.parse()
     return node.eval(context)
+
 
 class PythonNode:
     def __init__(self, content):
         self.content = content
 
     def eval(self, context):
-        return context[self.content.strip()]
+        try:
+            return str(eval(self.content.strip(), {}, context))
+        except Exception as e:
+            raise TemplateError(
+                'the expression {} failed with exception {}: {}'.format(
+                    self.content,
+                    type(e).__name__,
+                    str(e)
+                )
+            )
+
 
 class TextNode:
     def __init__(self, content):
@@ -16,6 +27,7 @@ class TextNode:
 
     def eval(self, context):
         return self.content
+
 
 class GroupNode:
     def __init__(self, nodes):
@@ -26,6 +38,7 @@ class GroupNode:
         for node in self.nodes:
             content += node.eval(context)
         return content
+
 
 class Parser:
     def __init__(self, tokens):
@@ -44,7 +57,13 @@ class Parser:
             self._upto += 1
 
     def try_consume(self, token):
-        pass
+        upcoming = self.peek(len(token))
+        if upcoming == token:
+            for _ in token:
+                self.next()
+            return True
+        else:
+            return False
 
     def parse(self):
         node = self._parse_group()
@@ -59,7 +78,7 @@ class Parser:
         return GroupNode(nodes)
 
     def _parse_node(self):
-        if self.peek() == "{":
+        if self.try_consume("{{"):
             return self._parse_python()
         else:
             return self._parse_text()
@@ -72,11 +91,14 @@ class Parser:
         return TextNode(content)
 
     def _parse_python(self):
-        assert self.peek() == "{"
-        self.next()
         content = ""
-        while self.peek() != "}":
+        while not self.try_consume("}}"):
+            if self.is_finished():
+                raise TemplateError
             content += self.peek()
             self.next()
-        self.next()
         return PythonNode(content)
+
+
+class TemplateError(Exception):
+    pass
