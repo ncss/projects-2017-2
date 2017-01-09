@@ -7,8 +7,10 @@ class Profiles(object):
     @classmethod
     def from_id(cls, pkid):
         """
-         
-        """
+         SELECT user, email
+         FROM profiles
+         WHERE id = ?
+         """,(pkid)
         # SQL select statement to retrieve
         # the username and email
         
@@ -17,7 +19,12 @@ class Profiles(object):
     @staticmethod
     def login(user,password):
         """
-        Takes username and password
+        SELECT id
+        FROM profiles
+        WHERE username = ? AND password = ?
+        """,(user, password)
+        """
+        Takes username and password)
         Returns userid.
         This can then be used with Profiles.from_id
         to return a new Profile object.
