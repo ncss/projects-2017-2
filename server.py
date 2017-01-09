@@ -7,7 +7,6 @@ def get_template(filename):
         return f.read()
 
 
-
 def index(response):
     if response.get_field('name'):
         template = get_template('result.html')
@@ -25,7 +24,39 @@ def account(response):
     template = get_template('account.html')
     response.write(template)
 
+def user_get_login(response):
+    template = get_template('login.html')
+    response.write(template)
+
+
+def user_post_login(response):
+    username = response.get_field('username')
+    password = response.get_field('password')
+    if username.strip() != '' and password.strip() != '':
+        # TODO: Add Database Check and redirect page
+        response.write(username)
+    else:
+        response.write('You messed up')
+
+
+def user_get_register(response):
+    template = get_template('register.html')
+    response.write(template)
+
+
+def user_post_register(response):
+    username = response.get_field('username')
+    password = response.get_field('password')
+    if username.strip() != '' and password.strip() != '':
+        # TODO: Add Database Check and redirect page
+        response.write(username + ' registered!')
+    else:
+        response.write('You messed up')
+
+
 server = Server()
 server.register("/", index)
 server.register('/account', account)
+server.register('/user/login', user_get_login, post=user_post_login)
+server.register('/user/register', user_get_register, post=user_post_register)
 server.run()
