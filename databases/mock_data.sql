@@ -1,17 +1,3 @@
-
-
-#PROFILES
-
-users = [
-    {"id": "989898", "username": "2-Elite-4-u", "password": "codislife", "email": "THEPRO@mlg.com"},
-    {"id": "452246", "username": "lolmemes", "password": "PianoTuner", "email": "The_Spiciest@live.com"},
-    {"id": "987654", "username": "SMARTness", "password": "45623424252352523523525235", "email": "yo@yahoo.com"},
-    {"id": "092455", "username": "James-Curran", "password": "JamesCurran", "email": "James_Curran@hotmail.com"},
-    {"id": "123456", "username": "Pie", "password": "smileyface", "email": "haha@gmail.com"},
-    {"id": "747025", "username": "ksgiwfw", "password": "weift823r2", "email": "f23rb82bf_@gmail.com"},
-    {"id": "020520", "username": "Becky", "password": "idIfg34rer", "email": "BeckyWilda@coles.com"}
-    ]
-
 #COMMENTS
 
 comments = [
@@ -27,4 +13,18 @@ comments = [
 --STATEMENT-DELIM
 (Id, Username, Password, Email)
 
-INSERT INTO users VALUES (      "989898", "2-Elite-4-u", "codislife", "THEPRO@mlg.com");
+INSERT INTO users VALUES ("989898", "2-Elite-4-u", "codislife", "THEPRO@mlg.com");
+--STATEMENT-DELIM
+INSERT INTO users VALUES ("452246", "lolmemes", "PianoTuner", "The_Spiciest@live.com");
+--STATEMENT-DELIM
+INSERT INTO users VALUES ("987654", "SMARTness", "45623424252352523523525235", "yo@yahoo.com");
+--STATEMENT-DELIM
+INSERT INTO users VALUES ("092455", "James-Curran", "JamesCurran", "James_Curran@hotmail.com");
+--STATEMENT-DELIM
+INSERT INTO users VALUES ("123456", "Pie", "smileyface", "haha@gmail.com");
+--STATEMENT-DELIM
+INSERT INTO users VALUES ("747025", "ksgiwfw", "weift823r2", "f23rb82bf_@gmail.com");
+--STATEMENT-DELIM
+INSERT INTO users VALUES ("020520", "Becky", "idIfg34rer", "BeckyWilda@coles.com";
+--STATEMENT-DELIM
+
