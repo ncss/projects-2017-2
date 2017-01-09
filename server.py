@@ -1,41 +1,23 @@
 from tornado.ncss import Server
-
-FORM = '''
-<!DOCTYPE html>
-<html>
-<head>
-generic text
-</head>
-<body>
-<form method="get">
-Enter your name <input type="text" name="name"/>
-<input type="submit"/>
-</form>
-</body>
-</html>
-'''
-
-RESULT = '''
-<!DOCTYPE html>
-<html>
-<head>
-generic text
-</head>
-<body>
-<h1>Hello {person}</h1>
-</body>
-</html>
-'''
+import os
 
 
-def test_get(response):
-    name = response.get_field("name")
-    if name is not None:
-        response.write(RESULT.format(person=name))
+def get_template(filename):
+    with open(os.path.join('templates', filename)) as f:
+        return f.read()
+
+
+
+def index(response):
+    if response.get_field('name'):
+        template = get_template('result.html')
+        template = template.format(person = response.get_field('name'))
     else:
-        response.write(FORM)
+        template = get_template('index.html')
+    response.write(template)
 
 
 server = Server()
-server.register("/", test_get)
+server.register("/", index)
 server.run()
+
