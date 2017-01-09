@@ -5,35 +5,53 @@ CREATE TABLE profiles (
 	email TEXT
 );
 
+--STATEMENT-DELIM
+
 CREATE TABLE images (
 	id INT PRIMARY KEY,
-	user_id INT FOREIGN KEY REFERENCES profiles(id),
-	date DATETIME DEFAULT (DATETIME('NOW'))
+	user_id INT,
+	date DATETIME  DEFAULT (DATETIME('NOW')),
+	FOREIGN KEY(user_id) REFERENCES profiles(id)
 );
+
+--STATEMENT-DELIM
 
 CREATE TABLE comments (
 	id INT PRIMARY KEY,
-	user_id INT FOREIGN KEY REFERENCES profiles(id),
-	reply_id INT FOREIGN KEY REFERENCES comments(id),
-	image_id INT FOREIGN KEY REFERENCES images(id),
+	user_id INT,
+	reply_id INT,
+	image_id INT,
 	contents TEXT,
-	date DATETIME DEFAULT (DATETIME('NOW'))
+	date DATETIME DEFAULT (DATETIME('NOW')),
+	FOREIGN KEY(user_id) REFERENCES profiles(id),
+	FOREIGN KEY(reply_id) REFERENCES comments(id),
+	FOREIGN KEY(image_id) REFERENCES images(id)
 );
+
+--STATEMENT-DELIM
 
 CREATE TABLE categories (
 	id INT PRIMARY KEY,
 	name TEXT -- category name
 );
 
+--STATEMENT-DELIM
+
 CREATE TABLE imagecategories (
 	id INT PRIMARY KEY,
-	category_id INT FOREIGN KEY REFERENCES categories(id),
-	image_id INT FOREIGN KEY REFERENCES images(id)
+	category_id INT,
+	image_id INT,
+	FOREIGN KEY(category_id) REFERENCES categories(id),
+	FOREIGN KEY(image_id) REFERENCES images(id)
 );
+
+--STATEMENT-DELIM
 
 CREATE TABLE votes (
 	id INT PRIMARY KEY,
-	user_id INT FOREIGN KEY REFERENCES profiles(id),
-	comment_id INT FOREIGN KEY REFERENCES comments(id),
-	is_upvote INT -- SQLite does not technically have a bool
+	user_id INT,
+	comment_id INT,
+	is_upvote INT, -- SQLite does not technically have a bool
+	FOREIGN KEY(user_id) REFERENCES profiles(id),
+	FOREIGN KEY(comment_id) REFERENCES comments(id)
 );
