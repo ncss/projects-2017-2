@@ -9,6 +9,7 @@ def render_file(filename, context):
 def render(template, context):
     parser = Parser(template)
     node = parser.parse()
+    #print(repr(node))
     return node.eval(context)
 
 def _evaluate_python(content, context):
@@ -28,6 +29,9 @@ class PythonNode:
     def __init__(self, content):
         self.content = content.strip()
 
+    def __repr__(self):
+        return 'PythonNode({!r})'.format(self.content)
+
     def eval(self, context):
         value = _evaluate_python(self.content, context)
         return html.escape(str(value))
@@ -37,6 +41,9 @@ class TextNode:
     def __init__(self, content):
         self.content = content
 
+    def __repr__(self):
+        return 'TextNode({!r})'.format(self.content)
+
     def eval(self, context):
         return self.content
 
@@ -44,6 +51,9 @@ class TextNode:
 class GroupNode:
     def __init__(self, nodes):
         self.nodes = nodes
+
+    def __repr__(self):
+        return 'GroupNode({})'.format(self.nodes)
 
     def eval(self, context):
         content = ""
@@ -56,17 +66,24 @@ class IncludeNode:
     def __init__(self, filename):
         self.filename = filename
 
+    def __repr__(self):
+        return 'IncludeNode({!r})'.format(self.filename)
+
     def eval(self, context):
         return render_file(self.filename, context)
 
 
 class IfNode:
-    def __init__(self, expression, content):
+    def __init__(self, expression, group):
         self.expression = expression
+        self.group = group
+
+    def __repr__(self):
+        return 'IfNode({!r}, {!r})'.format(self.expression, self.group)
 
     def eval(self, context):
         if _evaluate_python(self.expression, context):
-            return content
+            return self.group.eval(context)
         else:
             return ""
 
@@ -114,7 +131,11 @@ class Parser:
             while self.peek() is not None:
                 nodes.append(self._parse_node())
         except EndGroupException:
-            pass
+            if terminal_tag is None:
+                raise TemplateError('unexpected end tag')
+        else:
+            if terminal_tag is not None:
+                raise TemplateError('expected {}'.format(terminal_tag))
         return GroupNode(nodes)
 
     def _parse_node(self):
@@ -132,7 +153,7 @@ class Parser:
         elif self.try_consume('if'):
             return self._parse_if()
         elif self.try_consume('endif'):
-            raise EndGroupException('endif')
+            self._parse_end()
         else:
             raise TemplateError('unknown tag')
 
@@ -149,8 +170,15 @@ class Parser:
     def _parse_if(self):
         self._consume_whitespace()
         expression = self._read_to("%}", "if").strip()
-        group = self._parse_group()
+        group = self._parse_group('endif')
         return IfNode(expression, group)
+
+    def _parse_end(self):
+        self._consume_whitespace()
+        if not self.try_consume('%}'):
+            raise TemplateError('expected \'%}\' at end of endif tag')
+        raise EndGroupException('unexpected endif tag')
+        # its not really always unexpected
 
     def _parse_text(self):
         content = ""
@@ -174,5 +202,5 @@ class Parser:
 class TemplateError(Exception):
     pass
 
-class EndGroupException(Exception):
+class EndGroupException(TemplateError):
     pass
