@@ -1,4 +1,4 @@
-from .BasicInfo import BasicInfo
+from databases.BasicInfo import BasicInfo
 
 class OriginalPost(BasicInfo):
     def __init__(self, username, contents, date, image_data):
