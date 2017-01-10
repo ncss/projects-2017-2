@@ -36,3 +36,16 @@ assert template_engine.render("{% include 'fortytwo.txt' %}", {}) == "54"
 assert template_engine.render_file('helloworld.txt', {}) == "hello world"
 
 assert template_engine.render_file('fortytwo.txt', {}) == "54"
+
+assert template_engine.render('{{ value }}', {'value': '<html>'}) == "&lt;html&gt;"
+
+assert template_engine.render('{{ value }}', {'value': template_engine.GroupNode}) == \
+       '&lt;class &#x27;template_engine.GroupNode&#x27;&gt;'
+
+assert template_engine.render('{% if True %}this{% endif %} and/or this', {}) == 'this and/or this'
+
+assert template_engine.render('{% if value %}this{% endif %} and/or this', {'value': None}) == ' and/or this'
+
+assert throws('{% if value %}failure', {}), 'if with no endif should fail'
+
+assert throws('failure{% endif %}', {}), 'endif without matching if should fail'

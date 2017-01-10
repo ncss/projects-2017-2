@@ -1,3 +1,5 @@
+import html
+
 def render_file(filename, context):
     with open(filename) as f:
         template = f.read()
@@ -9,22 +11,26 @@ def render(template, context):
     node = parser.parse()
     return node.eval(context)
 
+def _evaluate_python(content, context):
+    try:
+        return eval(content, {}, context)
+    except Exception as e:
+        raise TemplateError(
+            'the expression {} failed with exception {}: {}'.format(
+                content,
+                type(e).__name__,
+                str(e)
+            )
+        )
+
 
 class PythonNode:
     def __init__(self, content):
-        self.content = content
+        self.content = content.strip()
 
     def eval(self, context):
-        try:
-            return str(eval(self.content.strip(), {}, context))
-        except Exception as e:
-            raise TemplateError(
-                'the expression {} failed with exception {}: {}'.format(
-                    self.content,
-                    type(e).__name__,
-                    str(e)
-                )
-            )
+        value = _evaluate_python(self.content, context)
+        return html.escape(str(value))
 
 
 class TextNode:
@@ -54,6 +60,17 @@ class IncludeNode:
         return render_file(self.filename, context)
 
 
+class IfNode:
+    def __init__(self, expression, content):
+        self.expression = expression
+
+    def eval(self, context):
+        if _evaluate_python(self.expression, context):
+            return content
+        else:
+            return ""
+
+
 class Parser:
     def __init__(self, tokens):
         self._tokens = tokens
@@ -71,6 +88,8 @@ class Parser:
             self._upto += 1
 
     def try_consume(self, token):
+        if token is None:
+            return False
         upcoming = self.peek(len(token))
         if upcoming == token:
             for _ in token:
@@ -89,10 +108,13 @@ class Parser:
             raise TemplateError('Extra content found at end of input!')
         return node
 
-    def _parse_group(self):
+    def _parse_group(self, terminal_tag=None):
         nodes = []
-        while self.peek() is not None:
-            nodes.append(self._parse_node())
+        try:
+            while self.peek() is not None:
+                nodes.append(self._parse_node())
+        except EndGroupException:
+            pass
         return GroupNode(nodes)
 
     def _parse_node(self):
@@ -107,6 +129,10 @@ class Parser:
         self._consume_whitespace()
         if self.try_consume('include'):
             return self._parse_include()
+        elif self.try_consume('if'):
+            return self._parse_if()
+        elif self.try_consume('endif'):
+            raise EndGroupException('endif')
         else:
             raise TemplateError('unknown tag')
 
@@ -119,6 +145,12 @@ class Parser:
         if not self.try_consume("%}"):
             raise TemplateError('expected %} after include tag')
         return IncludeNode(filename)
+
+    def _parse_if(self):
+        self._consume_whitespace()
+        expression = self._read_to("%}", "if").strip()
+        group = self._parse_group()
+        return IfNode(expression, group)
 
     def _parse_text(self):
         content = ""
@@ -140,4 +172,7 @@ class Parser:
         return result
 
 class TemplateError(Exception):
+    pass
+
+class EndGroupException(Exception):
     pass
