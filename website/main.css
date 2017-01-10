@@ -2,6 +2,7 @@
 body {
     font-family: 'Open Sans', sans-serif;
 }
+
 header {
     background-color: rgb(251, 140, 0);
     color: #FFF3E0;
@@ -10,6 +11,15 @@ header {
     font-family: 'Euphoria Script', cursive;
     font-size: 100px;
     font-weight: 100px;
+}
+
+header > h1{
+    display: inline;
+}
+
+header > p {
+    display: inline;
+    font-size: 10px;
 }
 
 main {
@@ -27,4 +37,37 @@ div {
 
 footer {
     background-color: rgb(251, 140, 0);
+}
+a {
+    text-decoration: none;
+}
+
+.headerbutton {
+    text-decoration: none;
+    background-color: white;
+    font-size: 50px;
+    text-align: right;
+    font-family: 'Open Sans', sans-serif;
+    padding: 5px;
+    border-radius: 20px;
+}
+
+.uploadbutton {
+    background-color: rgb(251, 140, 0);
+    padding: 5px;
+    text-align: center;
+    border-radius: 10px;
+    margin: 5px;
+}
+
+.uploadbutton > a {
+    color: white;
+}
+
+ul > li {
+    margin: 5px;
+}
+
+ul > li > a {
+    color: black;
 }
