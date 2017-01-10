@@ -3,4 +3,11 @@ class BasicInfo():
         self.username = username
         self.contents = contents
         self.date = date
-        self.id = id
+
+    @classmethod
+    def get(cls, id):
+        return cls()
+
+    @classmethod
+    def get(cls, id):
+        return cls()
