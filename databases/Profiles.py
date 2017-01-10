@@ -1,5 +1,7 @@
 import sqlite3, hashlib, random
-import db
+import databases.db
+
+sql = databases.db.db()
 
 class Profiles(object):
     def __init__(self,pkid,user,hashed_pass,email):
@@ -27,42 +29,35 @@ class Profiles(object):
     def from_id(cls, pkid):
         # SQL select statement to retrieve
         # the username and email
-        cur = db.db()
-        cur.execute("SELECT * FROM profiles WHERE id=?;",(str(pkid),))
-        pkid, user, hashed_pass, email = cur.fetchone()
-        cur.close()
+        sql.execute("SELECT * FROM profiles WHERE id=?;",(str(pkid),))
+        pkid, user, hashed_pass, email = sql.fetchone()
         return cls(pkid,user,hashed_pass,email)
 
 
     @classmethod
     def from_user(cls, username):
-        cur = db.db()
-        cur.execute("SELECT * FROM profiles WHERE username=?;",(username,))
-        pkid,user,hashed_pass,email=cur.fetchone()
-        cur.close()
+        sql.execute("SELECT * FROM profiles WHERE username=?;",(username,))
+        pkid,user,hashed_pass,email=sql.fetchone()
         return cls(pkid,user,hashed_pass,email)
 
     @classmethod
     def register(cls,username,password,email):
-        cur = db.db()
-        if cur.execute("SELECT * FROM profiles WHERE username=? LIMIT 1;", (username,)).fetchone():
+        if sql.execute("SELECT * FROM profiles WHERE username=? LIMIT 1;", (username,)).fetchone():
             raise ValueError("Registration error: Username {} is already taken.".format(username))
-        if cur.execute("SELECT * FROM profiles WHERE email=? LIMIT 1;", (email,)).fetchone():
+        if sql.execute("SELECT * FROM profiles WHERE email=? LIMIT 1;", (email,)).fetchone():
             raise ValueError("Registration error: Email {} is already used.".format(email))
 
         pkid = random.getrandbits(32)
-        while cur.execute("SELECT * FROM profiles WHERE id=?", (pkid,)).fetchone():
+        while sql.execute("SELECT * FROM profiles WHERE id=?", (pkid,)).fetchone():
             pkid = random.getrandbits(32)
-        cur.execute("INSERT INTO profiles VALUES (?,?,?,?)", (pkid,username,cls._hash(password),email))
-        cur.commit()
-        cur.close()
+        sql.execute("INSERT INTO profiles VALUES (?,?,?,?)", (pkid,username,cls._hash(password),email))
+        sql.commit()
 
         return cls(pkid, username, cls._hash(password), email)
 
     @classmethod
     def login(cls,username,password):
-        cur = db.db()
-        userdata = cur.execute("SELECT id,username,email FROM profiles WHERE username=? AND password=? LIMIT 1;",(username,cls._hash(password))).fetchone()
+        userdata = sql.execute("SELECT id,username,email FROM profiles WHERE username=? AND password=? LIMIT 1;",(username,cls._hash(password))).fetchone()
         if userdata:
             return cls(userdata[0],userdata[1],cls._hash(password),userdata[2])
         else:

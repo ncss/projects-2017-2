@@ -29,7 +29,7 @@ class db():
 
 if __name__ == "__main__":
     x = db()
-    x.execute("INSERT INTO profiles VALUES (1234, 'testmeme', 'somesortofhashquestionmark', 'd@d.com');")
+    # x.execute("INSERT INTO profiles VALUES (1234, 'testmeme', 'somesortofhashquestionmark', 'd@d.com');")
     print(x.execute("SELECT * FROM profiles").fetchall())
     for e in x:
         print(e)
