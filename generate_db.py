@@ -2,8 +2,9 @@ import sqlite3, os
 from databases.Profiles import Profiles
 
 # Ensure database does not exist already
-os.remove('data.db')
-conn=sqlite3.connect('data.db')
+if os.path.exists('databases/data.db'):
+    os.remove('databases/data.db')
+conn=sqlite3.connect('databases\\data.db')
 cursor=conn.cursor()
 
 cursor.executescript(open("create_database.sql").read())
