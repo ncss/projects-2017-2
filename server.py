@@ -21,7 +21,7 @@ def index(response):
 #        template = template.format(person = name.get_field('name'))
 
 def account(response):
-    template = get_template('account.html')
+    template = get_template('account.html').format(name = username)
     response.write(template)
 
 def user_get_login(response):
@@ -34,9 +34,11 @@ def user_post_login(response):
     password = response.get_field('password')
     if username.strip() != '' and password.strip() != '':
         # TODO: Add Database Check and redirect page
-        response.write(username)
+        template = get_template('account.html').format(name = username)
+        response.write(template)
     else:
-        response.write('You messed up')
+        template = get_template('login.html').format(message = 'Ha ha!\nIncorrect login details.')
+        response.write(template)
 
 
 def user_get_register(response):
