@@ -1,5 +1,4 @@
 import sqlite3, hashlib, random
-import db
 
 class Profiles(object):
     def __init__(self,pkid,user,hashed_pass,email):

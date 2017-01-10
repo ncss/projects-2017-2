@@ -1,10 +1,13 @@
+from databases.Profiles import Profiles
+
 import sqlite3
 conn = sqlite3.connect('data.db')
 cur = conn.cursor()
 
 class BasicInfo():
-    def __init__(self, username, contents, date):
-        self.username = username
+
+    def __init__(self, user, contents, date):
+        self.user = user
         self.contents = contents
         self.date = date
 
@@ -14,12 +17,9 @@ class BasicInfo():
         SELECT *
         FROM comments WHERE id=?
         ''', (id,))
-        print(cur.fetchone())
-        return cls()
+        id = cur.fetchone()
+        p = Profiles.from_id(id[1])
+        return cls(p, id[4], id[5])
 
-BasicInfo.get(1)
+print(BasicInfo.get(1).user)
 
-cur.execute('''
-        SELECT username
-        FROM profiles WHERE id=?
-        ''', (id,))
