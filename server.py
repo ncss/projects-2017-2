@@ -55,10 +55,20 @@ def user_post_register(response):
     else:
         response.write('You messed up')
 
+def category_get_selection(response):
+    template = get_template('category.html')
+    response.write(template)
+
+def category_post_selection(response):
+    category = response.get_field('category')
+    template = get_template('category.html').format(category=category)
+    response.write(template)
+
 
 server = Server()
 server.register("/", index)
 server.register('/account', account)
 server.register('/user/login', user_get_login, post=user_post_login)
 server.register('/user/register', user_get_register, post=user_post_register)
+server.register("/category/selection", category_get_selection, post=category_post_selection)
 server.run()
