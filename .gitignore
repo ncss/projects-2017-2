@@ -92,3 +92,4 @@ ENV/
 .idea/*
 
 .DS_store
+data.db
