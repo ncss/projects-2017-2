@@ -18,7 +18,7 @@ class Profiles(object):
     @staticmethod
     def _hash(password):
         # Disable hashing
-        # return password
+        return password
 
         hash_object = hashlib.sha256(bytes(password))
         hex_dig = hash_object.hexdigest()
