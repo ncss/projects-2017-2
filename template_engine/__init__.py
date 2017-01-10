@@ -47,7 +47,8 @@ class IncludeNode:
     def eval(self, context):
 
         with open(self.filename) as f:
-            return f.read()
+            file_content = f.read()
+        return render(file_content, context)
 
 
 
@@ -102,7 +103,7 @@ class Parser:
 
     def _parse_tag(self):
         self._consume_whitespace()
-        if self.try_consume(self, 'include'):
+        if self.try_consume('include'):
             return self._parse_include()
         else:
             raise TemplateError('unknown tag')
@@ -111,7 +112,11 @@ class Parser:
         self._consume_whitespace()
         if not self.try_consume('\''):
             raise TemplateError('expected \' after include')
-        # This is where we stopped
+        filename = self._read_to('\'', 'include')
+        self._consume_whitespace()
+        if not self.try_consume("%}"):
+            raise TemplateError('expected %} after include tag')
+        return IncludeNode(filename)
 
     def _parse_text(self):
         content = ""
@@ -121,14 +126,16 @@ class Parser:
         return TextNode(content)
 
     def _parse_python(self):
-        content = ""
-        while not self.try_consume("}}"):
-            if self.is_finished():
-                raise TemplateError('reached end of file while trying to pass python, expected "}}"')
-            content += self.peek()
-            self.next()
-        return PythonNode(content)
+        return PythonNode(self._read_to("}}", "python"))
 
+    def _read_to(self, token, name="tag"):
+        result = ""
+        while not self.try_consume(token):
+            if self.is_finished():
+                raise TemplateError('reached end of file while trying to parse {}, expected {}'.format(name, token))
+            result += self.peek()
+            self.next()
+        return result
 
 class TemplateError(Exception):
     pass

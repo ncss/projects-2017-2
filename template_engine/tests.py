@@ -30,3 +30,5 @@ assert throws("hello {{a+b}}",
     'Expected TemplateError for variable not in context'
 
 assert template_engine.render("{% include 'helloworld.txt' %}", {}) == "hello world"
+
+assert template_engine.render("{% include 'fortytwo.txt' %}", {}) == "54"
