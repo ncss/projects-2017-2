@@ -8,8 +8,8 @@ for statement in open("create_database.sql").read().split('--STATEMENT-DELIM'):
     print(statement)
     cursor.execute(statement)
 
-# for statement in open("mock_data.sql").read().split('--STATEMENT-DELIM'):
-#     print(statement)
-#     cursor.execute(statement)
+for statement in open("mock_data.sql").read().split('--STATEMENT-DELIM'):
+    print(statement)
+    cursor.execute(statement)
 
 conn.close()

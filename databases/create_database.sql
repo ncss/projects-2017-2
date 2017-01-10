@@ -1,7 +1,7 @@
 CREATE TABLE profiles (
 	id INT PRIMARY KEY,
 	username TEXT UNIQUE,
-	password TEXT, 
+	password TEXT,
 	email TEXT
 );
 
@@ -20,7 +20,7 @@ CREATE TABLE comments (
 	id INT PRIMARY KEY,
 	user_id INT,
 	reply_id INT,
-	image_id INT,
+	image_id INT DEFAULT NULL,
 	contents TEXT,
 	date DATETIME DEFAULT (DATETIME('NOW')),
 	FOREIGN KEY(user_id) REFERENCES profiles(id),
