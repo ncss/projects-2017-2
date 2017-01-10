@@ -9,6 +9,7 @@ def open():
     isopen = True
 
 def close():
+    global conn
     conn.close()
 
 class db():

@@ -1,4 +1,5 @@
 import sqlite3, hashlib, random
+import db
 
 class Profiles(object):
     def __init__(self,pkid,user,hashed_pass,email):
@@ -20,31 +21,30 @@ class Profiles(object):
 
         hash_object = hashlib.sha256(bytes(password,encoding="UTF-8"))
         hex_dig = hash_object.hexdigest()
-        return hex_dig;
+        return hex_dig
 
     @classmethod
     def from_id(cls, pkid):
         # SQL select statement to retrieve
         # the username and email
-        db.execute("SELECT * FROM profiles WHERE id=?;",(str(pkid),))
-        pkid, user, hashed_pass, email = db.fetchone()
+        cur = db.db()
+        cur.execute("SELECT * FROM profiles WHERE id=?;",(str(pkid),))
+        pkid, user, hashed_pass, email = cur.fetchone()
+        cur.close()
         return cls(pkid,user,hashed_pass,email)
 
 
     @classmethod
     def from_user(cls, username):
-        conn=sqlite3.connect("data.db");
-        cur=conn.cursor()
+        cur = db.db()
         cur.execute("SELECT * FROM profiles WHERE username=?;",(username,))
-        row=cur.fetchone()
-        conn.close()
-        pkid,user,hashed_pass,email=row
+        pkid,user,hashed_pass,email=cur.fetchone()
+        cur.close()
         return cls(pkid,user,hashed_pass,email)
 
     @classmethod
     def register(cls,username,password,email):
-        conn=sqlite3.connect("data.db");
-        cur=conn.cursor()
+        cur = db.db()
         if cur.execute("SELECT * FROM profiles WHERE username=? LIMIT 1;", (username,)).fetchone():
             raise ValueError("Registration error: Username {} is already taken.".format(username))
         if cur.execute("SELECT * FROM profiles WHERE email=? LIMIT 1;", (email,)).fetchone():
@@ -54,17 +54,19 @@ class Profiles(object):
         while cur.execute("SELECT * FROM profiles WHERE id=?", (pkid,)).fetchone():
             pkid = random.getrandbits(32)
         cur.execute("INSERT INTO profiles VALUES (?,?,?,?)", (pkid,username,cls._hash(password),email))
-        conn.commit()
-        conn.close()
+        cur.commit()
+        cur.close()
 
         return cls(pkid, username, cls._hash(password), email)
 
     @classmethod
     def login(cls,username,password):
-        conn=sqlite3.connect("data.db")
-        cur=conn.cursor()
+        cur = db.db()
         userdata = cur.execute("SELECT id,username,email FROM profiles WHERE username=? AND password=? LIMIT 1;",(username,cls._hash(password))).fetchone()
         if userdata:
             return cls(userdata[0],userdata[1],cls._hash(password),userdata[2])
         else:
-            raise ValueError("Username {} does not exist or password is incorrect.".format(username));
+            raise ValueError("Username {} does not exist or password is incorrect.".format(username))
+
+if __name__ == "__main__":
+    print(Profiles.login("lolmemes","PianoTuner"))
