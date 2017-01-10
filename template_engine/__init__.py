@@ -1,3 +1,9 @@
+def render_file(filename, context):
+    with open(filename) as f:
+        template = f.read()
+    return render(template, context)
+
+
 def render(template, context):
     parser = Parser(template)
     node = parser.parse()
@@ -45,11 +51,7 @@ class IncludeNode:
         self.filename = filename
 
     def eval(self, context):
-
-        with open(self.filename) as f:
-            file_content = f.read()
-        return render(file_content, context)
-
+        return render_file(self.filename, context)
 
 
 class Parser:
