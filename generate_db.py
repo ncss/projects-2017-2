@@ -4,11 +4,11 @@ from databases.Profiles import Profiles
 # Ensure database does not exist already
 if os.path.exists('databases/data.db'):
     os.remove('databases/data.db')
-conn=sqlite3.connect('databases\\data.db')
+conn=sqlite3.connect('databases/data.db')
 cursor=conn.cursor()
 
-cursor.executescript(open("create_database.sql").read())
-cursor.executescript(open("mock_data.sql").read())
+cursor.executescript(open("databases/create_database.sql").read())
+cursor.executescript(open("databases/mock_data.sql").read())
 
 # Hash all of the passwords
 for r in cursor.execute("SELECT id,password FROM profiles;").fetchall():
