@@ -1,5 +1,6 @@
 from tornado.ncss import Server
 import os
+from template_engine.__init__ import render_file
 
 
 def get_template(filename):
@@ -9,10 +10,9 @@ def get_template(filename):
 
 def index(response):
     if response.get_field('name'):
-        template = get_template('result.html')
-        template = template.format(person = response.get_field('name'))
+        template = render_file('templates/result.html', {'person': response.get_field('name')})
     else:
-        template = get_template('index.html')
+        template = render_file('index.html', None)
     response.write(template)
 
 #def account(name):
