@@ -13,12 +13,12 @@ users = [
 #COMMENTS
 
 comments = [
-    {"id": "1", "poster_id": "989898", "reply_to": None, "contents": "I can do better.", "Dates": "1/1/2017", "image_id": None},
-    {"id": "2", "poster_id": "452246", "reply_to": "4", "contents": "Me like", "Dates": "1/1/2017", "image_id": None},
-    {"id": "3", "poster_id": "987654", "reply_to": None, "contents": "I believe your choice of colours is incorrect. Add more warmth so you can add more life to it.", "Dates": "1/1/2017", "image_id": None},
-    {"id": "4", "poster_id": "092455", "reply_to": None, "contents": "Is that a James Curran I see?", "Dates": "1/1/2017", "image_id": None},
-    {"id": "5", "poster_id": "123456", "reply_to": None, "contents": "1000000000000000 upvotes for you good sir!", "Dates": "1/1/2017", "image_id": None},
-    {"id": "6", "poster_id": "747025", "reply_to": "3", "contents": "Yeah, I agree.", "Dates": "2/1/2017", "image_id": None},
-    {"id": "7", "poster_id": "020520", "reply_to": "5", "contents": "Plus mine :)", "Dates": "2/1/2017", "image_id": None}
+    {"id": "1", "user_id": "989898", "reply_to": None, "contents": "I can do better.", "Dates": "1/1/2017", "image_id": None},
+    {"id": "2", "user_id": "452246", "reply_to": "4", "contents": "Me like", "Dates": "1/1/2017", "image_id": None},
+    {"id": "3", "user_id": "987654", "reply_to": None, "contents": "I believe your choice of colours is incorrect. Add more warmth so you can add more life to it.", "Dates": "1/1/2017", "image_id": None},
+    {"id": "4", "user_id": "092455", "reply_to": None, "contents": "Is that a James Curran I see?", "Dates": "1/1/2017", "image_id": None},
+    {"id": "5", "user_id": "123456", "reply_to": None, "contents": "1000000000000000 upvotes for you good sir!", "Dates": "1/1/2017", "image_id": None},
+    {"id": "6", "user_id": "747025", "reply_to": "3", "contents": "Yeah, I agree.", "Dates": "2/1/2017", "image_id": None},
+    {"id": "7", "user_id": "020520", "reply_to": "5", "contents": "Plus mine :)", "Dates": "2/1/2017", "image_id": None}
     ]
 
