@@ -93,3 +93,6 @@ ENV/
 
 .DS_store
 data.db
+
+# Pycharm specific files removal
+.idea
