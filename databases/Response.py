@@ -1,6 +1,6 @@
 from databases.Comment import Comment
 
 class Response(Comment):
-    def __init__(self, username, contents, date, reply_to, image_data):
-        super().__init__(username, contents, date, reply_to)
-        self.image_data = image_data
+    def __init__(self, username, *args):
+        super().__init__(username, *args)
+        self.image_data = args[3]
