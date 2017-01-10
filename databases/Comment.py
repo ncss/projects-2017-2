@@ -11,14 +11,13 @@ class Comment(BasicInfo):
         self.reply_to = args[2]
 
     @classmethod
-    def CreateComment(self, comment_id, user_id, reply_to, image_id, contents, date):
+    def CreateComment(cls, comment_id, user_id, reply_to, image_id, contents, date):
         sql.execute('''
                 INSERT INTO comments VALUES (?, ?, ?, ?, ?, ?)
                 ''', (comment_id, user_id, reply_to, image_id, contents, date,))
-        comment = sql.fetchone()
         p = Profiles.from_id(user_id)
-        return cls(p, *comment)
+        return cls(p, *[comment_id, user_id, reply_to, image_id, contents, date])
 
-stub = ['1', '123', '4', 'NULL', 'Hello', '12/1/14' ]
 
-print("hi".CreateComment(0).contents)
+
+#print(Comment.CreateComment('18', '20520', '4', 'NULL', 'Hello', '12/1/14').contents)
