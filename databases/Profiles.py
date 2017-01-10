@@ -1,6 +1,5 @@
-import sqlite3
-import hashlib
-import random
+import sqlite3, hashlib, random
+import db
 
 class Profiles(object):
     def __init__(self,pkid,user,hashed_pass,email):
@@ -18,7 +17,7 @@ class Profiles(object):
     @staticmethod
     def _hash(password):
         # Disable hashing
-        return password
+        # return password
 
         hash_object = hashlib.sha256(bytes(password,encoding="UTF-8"))
         hex_dig = hash_object.hexdigest()
@@ -28,11 +27,11 @@ class Profiles(object):
     def from_id(cls, pkid):
         # SQL select statement to retrieve
         # the username and email
-        conn=sqlite3.connect("data.db");
-        cur=conn.cursor();
-        cur.execute("SELECT * FROM profiles WHERE id=?;",(str(pkid),));
+        conn=sqlite3.connect("data.db")
+        cur=conn.cursor()
+        cur.execute("SELECT * FROM profiles WHERE id=?;",(str(pkid),))
+        pkid, user, hashed_pass, email = cur.fetchone()
         conn.close()
-        pkid,user,hashed_pass,email=row
         return cls(pkid,user,hashed_pass,email)
 
 
@@ -40,7 +39,7 @@ class Profiles(object):
     def from_user(cls, username):
         conn=sqlite3.connect("data.db");
         cur=conn.cursor()
-        cur.execute("SELECT * FROM profiles WHERE username=?;",(username,));
+        cur.execute("SELECT * FROM profiles WHERE username=?;",(username,))
         row=cur.fetchone()
         conn.close()
         pkid,user,hashed_pass,email=row
