@@ -1,7 +1,8 @@
-from .BasicInfo import BasicInfo
+from databases.BasicInfo import BasicInfo
 
 class Comment(BasicInfo):
-    def __init__(self, username, contents, date, reply_to):
-        super().__init__(username, contents, date)
-        self.reply_to = reply_to
+    def __init__(self, user, *args):
+        super().__init__(user, *args)
+        self.reply_to = args[2]
 
+print(Comment.get(2).reply_to)

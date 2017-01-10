@@ -6,10 +6,10 @@ cur = conn.cursor()
 
 class BasicInfo():
 
-    def __init__(self, user, contents, date):
+    def __init__(self, user, *args):
         self.user = user
-        self.contents = contents
-        self.date = date
+        self.contents = args[4]
+        self.date = args[5]
 
     @classmethod
     def get(cls, id):
@@ -19,7 +19,7 @@ class BasicInfo():
         ''', (id,))
         id = cur.fetchone()
         p = Profiles.from_id(id[1])
-        return cls(p, id[4], id[5])
+        return cls(p, *id)
 
-print(BasicInfo.get(1).user)
+print(BasicInfo.get(1).contents)
 
