@@ -5,18 +5,24 @@ isopen = False
 
 def open():
     global conn,isopen
-    conn = sqlite3.connect("data.db")
+    conn = sqlite3.connect("databases/data.db")
     isopen = True
 
 def close():
     global conn
     conn.close()
 
-class db():
+class db:
     def __init__(self):
         if isopen is False:
             open()
         self.cur = conn.cursor()
+
+    def __repr__(self):
+        return "db()"
+
+    def __str__(self):
+        return "db object"
 
     def commit(self):
         conn.commit()
