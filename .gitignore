@@ -89,3 +89,10 @@ ENV/
 .ropeproject
 .DS_store
 data.db
+
+# Pycharm specific files removal
+.idea/workspace.xml
+.idea/misc.xml
+.idea/modules.xml
+.idea/vcs.xml
+.idea/*.iml
