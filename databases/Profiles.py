@@ -1,9 +1,7 @@
 import sqlite3, hashlib, random
-#from databases.db import db
+from databases.db import db
 
-#sql = db()
-conn = sqlite3.connect("databases/data.db")
-sql = conn.cursor()
+sql = db()
 
 class Profiles(object):
     def __init__(self,pkid,user,hashed_pass,email):
@@ -13,7 +11,7 @@ class Profiles(object):
         self.email=email
 
     def __repr__(self):
-        return "Profiles({},{},{},{})".format(self._id,self.user,self.hashed_pass,self.email)
+        return "Profiles({},{},{},{})".format(self._id,self.user,repr(self.hashed_pass),self.email)
 
     def __str__(self):
         return "Profile id {} with username: {}, hashed pass: {}, email: {}".format(self._id,self.user,self.hashed_pass,self.email)

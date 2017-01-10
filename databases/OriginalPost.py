@@ -1,9 +1,9 @@
 from databases.BasicInfo import BasicInfo
 from databases.Profiles import Profiles
+from databases.db import db
 import sqlite3
-conn = sqlite3.connect('data.db')
-cur = conn.cursor()
 
+sql = db()
 
 class OriginalPost(BasicInfo):
     def __init__(self, user, *args):
@@ -12,12 +12,12 @@ class OriginalPost(BasicInfo):
 
     @staticmethod
     def GetPosts(skip):
-        cur.execute('''
+        sql.execute('''
         SELECT *
         FROM comments
         WHERE reply_id IS NULL;''')
 
-        results = cur.fetchall()[skip:]
+        results = sql.fetchall()[skip:]
         original_post  = []
         for a in results:
             p = Profiles.from_id(a[1])
