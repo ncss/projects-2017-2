@@ -20,7 +20,7 @@ class Profiles(object):
         # Disable hashing
         # return password
 
-        hash_object = hashlib.sha256(bytes(password))
+        hash_object = hashlib.sha256(bytes(password,encoding="UTF-8"))
         hex_dig = hash_object.hexdigest()
         return hex_dig;
 
