@@ -31,8 +31,6 @@ class Profiles(object):
         conn=sqlite3.connect("data.db");
         cur=conn.cursor();
         cur.execute("SELECT * FROM profiles WHERE id=?;",(str(pkid),));
-        row=cur.fetchone();
-        print(row)
         conn.close()
         pkid,user,hashed_pass,email=row
         return cls(pkid,user,hashed_pass,email)
