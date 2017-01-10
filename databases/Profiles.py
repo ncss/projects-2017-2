@@ -26,11 +26,8 @@ class Profiles(object):
     def from_id(cls, pkid):
         # SQL select statement to retrieve
         # the username and email
-        conn=sqlite3.connect("data.db")
-        cur=conn.cursor()
-        cur.execute("SELECT * FROM profiles WHERE id=?;",(str(pkid),))
-        pkid, user, hashed_pass, email = cur.fetchone()
-        conn.close()
+        db.execute("SELECT * FROM profiles WHERE id=?;",(str(pkid),))
+        pkid, user, hashed_pass, email = db.fetchone()
         return cls(pkid,user,hashed_pass,email)
 
 
