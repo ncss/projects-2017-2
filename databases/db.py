@@ -1,21 +1,37 @@
 import sqlite3
+
 conn = None
-cur  = None
+isopen = False
+
 def open():
-    global conn,cur
-    conn=sqlite3.connect("data.db")
-    cur=conn.cursor();
-    return cur
+    global conn,isopen
+    conn = sqlite3.connect("data.db")
+    isopen = True
 
 def close():
-    global conn,cur
-    conn.close();
-    return
+    global conn
+    conn.close()
 
-def execute(s,args=()):
-    return cur.execute(s,args)
+class db():
+    def __init__(self):
+        if isopen is False:
+            open()
+        self.cur = conn.cursor()
 
-if __name__=="__main__":
-    open()
-    execute("INSERT INTO profiles VALUES (1234, 'testmeme', 'somesortofhashquestionmark', 'd@d.com');")
-    print(execute("SELECT * FROM profiles").fetchall())
+    def commit(self):
+        conn.commit()
+
+    def __getattr__(self, item):
+        return self.cur.__getattribute__(item)
+
+    def __iter__(self):
+        return self.cur.__iter__()
+
+if __name__ == "__main__":
+    x = db()
+    # x.execute("INSERT INTO profiles VALUES (1234, 'testmeme', 'somesortofhashquestionmark', 'd@d.com');")
+    print(x.execute("SELECT * FROM profiles").fetchall())
+    for e in x:
+        print(e)
+    x.commit()
+    x.close()
