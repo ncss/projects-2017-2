@@ -1,3 +1,5 @@
+BEGIN TRANSACTION;
+
 CREATE TABLE profiles (
 	id INT PRIMARY KEY,
 	username TEXT UNIQUE,
@@ -5,16 +7,12 @@ CREATE TABLE profiles (
 	email TEXT
 );
 
---STATEMENT-DELIM
-
 CREATE TABLE images (
 	id INT PRIMARY KEY,
 	user_id INT,
-	date DATETIME  DEFAULT (DATETIME('NOW')),
+	date DATETIME DEFAULT (DATETIME('NOW')),
 	FOREIGN KEY(user_id) REFERENCES profiles(id)
 );
-
---STATEMENT-DELIM
 
 CREATE TABLE comments (
 	id INT PRIMARY KEY,
@@ -28,14 +26,10 @@ CREATE TABLE comments (
 	FOREIGN KEY(image_id) REFERENCES images(id)
 );
 
---STATEMENT-DELIM
-
 CREATE TABLE categories (
 	id INT PRIMARY KEY,
 	name TEXT -- category name
 );
-
---STATEMENT-DELIM
 
 CREATE TABLE imagecategories (
 	id INT PRIMARY KEY,
@@ -45,8 +39,6 @@ CREATE TABLE imagecategories (
 	FOREIGN KEY(image_id) REFERENCES images(id)
 );
 
---STATEMENT-DELIM
-
 CREATE TABLE votes (
 	id INT PRIMARY KEY,
 	user_id INT,
@@ -55,3 +47,5 @@ CREATE TABLE votes (
 	FOREIGN KEY(user_id) REFERENCES profiles(id),
 	FOREIGN KEY(comment_id) REFERENCES comments(id)
 );
+
+COMMIT;

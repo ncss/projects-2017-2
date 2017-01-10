@@ -1,3 +1,4 @@
+import sqlite3
 class Profiles(object):
     def __init__(self,pkid,user,email):
         self._id=pkid
@@ -6,33 +7,29 @@ class Profiles(object):
 
     @classmethod
     def from_id(cls, pkid):
-        """
-         SELECT user, email
-         FROM profiles
-         WHERE id = ?
-         """,(pkid)
         # SQL select statement to retrieve
         # the username and email
-        
-        return cls(pkid,user,email)
+        conn=sqlite3.connect("data.db");
+        cur=conn.cursor();
+        cur.execute("SELECT * FROM profiles WHERE id="+str(pkid));
+        row=cur.fetchone();
+        print(row)
+        conn.close()
+        pkid,user,email=(i for i in row)
+        return Profiles(pkid,user,email)
 
-    @staticmethod
-    def login(user,password):
-        """
-        SELECT id
-        FROM profiles
-        WHERE username = ? AND password = ?
-        """,(user, password)
-        """
-        Takes username and password)
-        Returns userid.
-        This can then be used with Profiles.from_id
-        to return a new Profile object.
-        """
-        # Hash teh password
-        # SQL select statement to retrieve
-        # the userid
-        # Return None (or raise Error, you choose)
-        # if there is no user matching
-        # username and hashed password.
-        return pkid
+
+    @classmethod
+    def from_user(cls, username):
+        conn=sqlite3.connect("data.db");
+        cur=conn.cursor()
+        cur.execute("SELECT * FROM profiles WHERE user="+str(username));
+        row=cur.fetchone()
+        conn.close()
+        pkid,user,email=(i for i in row)
+        return Profiles(pkid,user,email);
+
+p=Profiles(1,"Viney","vineyk24@gmail.com");
+
+p.from_id(1);
+
