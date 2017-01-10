@@ -8,77 +8,85 @@
 </head>
 
 <body>
-<header>
-<h1>Draw.This</h1>
-    <p class="headerbutton"><a href="account.html">Account</a></p>
-    <p class="headerbutton"><a href="login.html">Login</a></p>
-</header>
+<div id="header" class="row">
+    <div id="title">
+        <h1>Draw.This</h1>
+    </div>
+    <div id="headermenu">
+        <p class="headerbutton"><a href="account.html">Account</a></p>
+        <p class="headerbutton"><a href="login.html">Login</a></p>
+    </div>
+</div>
+<div id="main" class="row">
+    <div id="nav">
+        <p class="uploadbutton"><a href="upload.html">Upload</a></p>
+        <p><a href="recent.html">Recent</a></p>
+        <p><a href="popular.html">Popular</a></p>
+        <h2>Categories</h2>
+        <ul>
+            <li>
+                <p>Landscape</p>
+                <ul>
+                    <li>Mountains</li>
+                    <li>Sea</li>
+                    <li>Lake</li>
+                    <li>Sunset</li>
+                </ul>
+            </li>
+            <li>
+                <p>Figure</p>
+                <ul>
+                    <li>Portrait
+                    <li>Animals</li>
+                    <li>Sports</li>
+                </ul>
+            </li>
+            <li>
+                <p>Still Life</p>
+                <ul>
+                    <li>Furniture</li>
+                    <li>Food</li>
+                    <li>Accessory</li>
+                    <li>Fashion</li>
+                    <li>Vehicles</li>
+                </ul>
+            </li>
+            <li>
+                <p>Patterns</p>
+                <ul>
+                    <li>Indian</li>
+                    <li>Aboriginal</li>
+                    <li>Chinese</li>
+                </ul>
+            </li>
+            <li>
+                <p>Architecture</p>
+                <ul>
+                    <li>Contemporary</li>
+                    <li>Renaissance</li>
+                    <li>Constructive</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <div id="maincontent">
+        <main>
+            <p>Hello world!</p>
+            <form>
+                Username:<br>
+                <input type="text" name="username"><br>
+                Password:<br>
+                <input type="text" name="password"><br>
+                <input type="submit" value="Submit">
+            </form>
 
-<div>
-    <p class="uploadbutton"><a href="upload.html">Upload</a></p>
-    <p><a href="recent.html">Recent</a></p>
-    <p><a href="popular.html">Popular</a></p>
-    <h2>Categories</h2>
-    <ul>
-        <li>
-            <p>Landscape</p>
-            <ul>
-                <li>Mountains</li>
-                <li>Sea</li>
-                <li>Lake</li>
-                <li>Sunset</li>
-            </ul>
-        </li>
-        <li>
-            <p>Figure</p>
-            <ul>
-                <li>Portrait
-                <li>Animals</li>
-                <li>Sports</li>
-            </ul>
-        </li>
-        <li>
-            <p>Still Life</p>
-            <ul>
-                <li>Furniture</li>
-                <li>Food</li>
-                <li>Accessory</li>
-                <li>Fashion</li>
-                <li>Vehicles</li>
-            </ul>
-        </li>
-        <li>
-            <p>Patterns</p>
-            <ul>
-                <li>Indian</li>
-                <li>Aboriginal</li>
-                <li>Chinese</li>
-            </ul>
-        </li>
-        <li>
-            <p>Architecture</p>
-            <ul>
-                <li>Contemporary</li>
-                <li>Renaissance</li>
-                <li>Constructive</li>
-            </ul>
-        </li>
-    </ul>
+        </main>
+        <footer>
+             <p>&copy; www.draw.this.com</p>
+        </footer>
+    </div>
 </div>
 
-<main>
-    <p>Hello world!</p>
-    <form>
-        Username:<br>
-        <input type="text" name="username"><br>
-        Password:<br>
-        <input type="text" name="password"><br>
-        <input type="submit" value="Submit">
-    </form>
-</main>
 
-<footer>
-    <p>&copy; www.draw.this.com</p>
-</footer>
 </body>
 </html>
