@@ -17,8 +17,8 @@ def get_loggedin(response):
         return loggedin.decode('UTF8')
 
 def index(response):
-
-    template = render_file('templates/index.html', {"images": [(p.get_image_path(), p.id) for p in OriginalPost.get_posts(db)], "cur_post": None, "login": get_loggedin(response)})
+    images = [(p.get_image_path(), p.id) for p in OriginalPost.get_posts(db)]
+    template = render_file('templates/index.html', {"images": images, "cur_post": None, "login": get_loggedin(response)})
     response.write(template)
 
 def is_valid_email(email):
@@ -35,7 +35,8 @@ def is_valid_username(username):
 
 def user_get_account(response):
     loggedin = get_loggedin(response)
-    template = render_file('templates/account.html', {'login': loggedin})
+    images = [(p.get_image_path(), p.id) for p in OriginalPost.get_posts_by_user(db, loggedin)]
+    template = render_file('templates/account.html', {'login': loggedin, 'profile': Profiles.from_user(db, loggedin), 'images': images})
     response.write(template)
     #else:
     #    response.redirect('/user/login')
