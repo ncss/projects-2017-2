@@ -90,6 +90,13 @@ def category_post_selection(response):
     template = render_file('templates/category.html', {'category': category})
     response.write(template)
 
+def see_photo_and_response(response):
+    template = render_file('templates/sketchresponse.html', {})
+    response.write(template)
+
+def upload_photo_page(response):
+    template = render_file("templates/uploadphotos.html", {})
+    response.write(template)
 
 server = Server()
 server.register("/", index)
@@ -98,4 +105,6 @@ server.register('/user/login', user_get_login, post=user_post_login)
 server.register('/user/register', user_get_register, post=user_post_register)
 server.register('/user/logout' , user_get_logout)
 server.register("/category/selection", category_get_selection, post=category_post_selection)
+server.register('/photo/view', see_photo_and_response)
+server.register("/photo/upload", upload_photo_page)
 server.run()
