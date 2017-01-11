@@ -1,20 +1,8 @@
 {% include 'templates/header.html' %}
 <h1>Image Wall:</h1>
 <div id="image-wall">
-    <img src="/static/images/a.jpg" class="wallphoto">
-    <img src="/static/images/b.jpeg" class="wallphoto">
-    <img src="/static/images/c.jpg" class="wallphoto">
-    <img src="/static/images/d.jpg" class="wallphoto">
-    <img src="/static/images/e.jpg" class="wallphoto">
-    <img src="/static/images/f.jpg" class="wallphoto">
-    <img src="/static/images/g.jpg" class="wallphoto">
-    <img src="/static/images/h.jpg" class="wallphoto">
-    <img src="/static/images/i.jpg" class="wallphoto">
-    <img src="/static/images/j.jpg" class="wallphoto">
-    <img src="/static/images/k.jpg" class="wallphoto">
-    <img src="/static/images/l.jpeg" class="wallphoto">
-    <img src="/static/images/m.jpg" class="wallphoto">
-    <img src="/static/images/n.jpg" class="wallphoto">
-    <img src="/static/images/o.jpg" class="wallphoto">
+    {% for cur_post in images %}
+        <img src="{{ cur_post }}" class="wallphoto">
+    {% endfor %}
 </div>
 {% include 'templates/footer.html' %}

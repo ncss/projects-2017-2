@@ -1,15 +1,17 @@
 from databases.basic_info import BasicInfo
 from databases.profiles import Profiles
+import os
+import re
 
 class OriginalPost(BasicInfo):
-    def __init__(self, pkid, user, *args):
-        super().__init__(pkid, user, *args)
+    def __init__(self, user, *args):
+        super().__init__(user, *args)
 
     def __repr__(self):
         return "OriginalPost("+",".join(map(str,[self.id,self.user,self.reply_to,self.contents,self.date]))+")"
 
     @staticmethod
-    def get_posts(sql,skip):
+    def get_posts(sql,skip=0):
         sql.execute('''
         SELECT *
         FROM comments
@@ -37,5 +39,11 @@ class OriginalPost(BasicInfo):
         FROM comments
         WHERE id=?''',(pkid,))
         date = sql.fetchone()[0]
-        print(pkid,user_id,None,contents,date)
-        return cls(pkid,user_id,None,contents,date)
+        # print(Profiles.from_id(sql,user_id),pkid,user_id,None,contents,date)
+        return cls(Profiles.from_id(sql,user_id),pkid,user_id,None,contents,date)
+
+    def get_image_path(self):
+        for file in os.listdir('static/images/'):
+            ext = re.match(str(self.id)+'(\..*)',file)
+            if ext:
+                return 'static/images/'+str(self.id)+ext.group(1)

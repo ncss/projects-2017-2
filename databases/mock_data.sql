@@ -11,12 +11,12 @@ INSERT INTO profiles VALUES ( 20520, "Becky", "idIfg34rer", "BeckyWilda@coles.co
 
 
 --(id, user_id, reply_id, contents, date)
-INSERT INTO comments VALUES (1, 989898, NULL, "I can do better.", "2017-01-01 00:00:26");
-INSERT INTO comments VALUES (2, 452246, 4, "Me like", "2017-01-01 00:01:50");
-INSERT INTO comments VALUES (3, 987654, NULL, "I believe your choice of colours is incorrect. Add more warmth so you can add more life to it.", "2017-01-01 05:42:42");
-INSERT INTO comments VALUES (4, 92455, NULL, "Is that a James Curran I see?", "2017-01-01 08:13:42");
-INSERT INTO comments VALUES (5, 123456, NULL, "1000000000000000 upvotes for you good sir!", "2017-01-02 00:00:00");
-INSERT INTO comments VALUES (6, 747025, 3, "Yeah, I agree.", "2017-01-02 01:05:58");
-INSERT INTO comments VALUES (7, 20520, 5, "Plus mine :)", "2017-01-02 01:17:21");
+-- INSERT INTO comments VALUES (1, 989898, NULL, "I can do better.", "2017-01-01 00:00:26");
+-- INSERT INTO comments VALUES (2, 452246, 4, "Me like", "2017-01-01 00:01:50");
+-- INSERT INTO comments VALUES (3, 987654, NULL, "I believe your choice of colours is incorrect. Add more warmth so you can add more life to it.", "2017-01-01 05:42:42");
+-- INSERT INTO comments VALUES (4, 92455, NULL, "Is that a James Curran I see?", "2017-01-01 08:13:42");
+-- INSERT INTO comments VALUES (5, 123456, NULL, "1000000000000000 upvotes for you good sir!", "2017-01-02 00:00:00");
+-- INSERT INTO comments VALUES (6, 747025, 3, "Yeah, I agree.", "2017-01-02 01:05:58");
+-- INSERT INTO comments VALUES (7, 20520, 5, "Plus mine :)", "2017-01-02 01:17:21");
 
 COMMIT;
