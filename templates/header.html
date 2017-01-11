@@ -13,14 +13,22 @@
         <a href="/"><img src="/static/images/logo.png"/></a>
     </div>
     <div id="headermenu">
-        <p><a href="/user/login" class="headerbutton">Login <i class="fa fa-lock" aria-hidden="true"></i></a>
-
-        <a href="/user/register" class="headerbutton">Register <i class="fa fa-user" aria-hidden="true"></i></a></p>
+        <p>
+            {% if login %}
+            <a href="/user/account" class="headerbutton">Account <i class="fa fa-user" aria-hidden="true"></i></a>
+            <a href="/user/logout" class="headerbutton">Logout <i class="fa fa-lock" aria-hidden="true"></i></a>
+            {% else %}
+            <a href="/user/login" class="headerbutton">Login <i class="fa fa-lock" aria-hidden="true"></i></a>
+            <a href="/user/register" class="headerbutton">Register <i class="fa fa-user" aria-hidden="true"></i></a>
+            {% endif %}
+        </p>
     </div>
 </div>
 <div id="main" class="row">
     <div id="nav">
+        {% if login %}
         <p class="uploadbutton"><a href="/photo/upload">Upload <i class="fa fa-upload" aria-hidden="true"></i></a></p>
+        {% endif %}
         <p id="recent"><a href="recent.html">Recent</a></p>
         <p id="popular"><a href="popular.html">Popular</a></p>
         <h2 id="categories">Categories</h2>
