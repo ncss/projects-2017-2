@@ -254,7 +254,35 @@ input[type="submit"]{
     font-size: 80px !important;
 }
 
+.bigphotocontainer {
+    height: auto;
+    width: auto;
+    max-width: 500px;
+    max-height: 500px;
+    display: block;
+    padding: 5px 5px 100px 5px;
+    margin: 0 auto;
+}
+
+.responses {
+    display: block;
+}
+
+
 .response-img{
     float:left;
-    padding: 10px;
+    padding: 20px;
 }
+/*
+.bigphotocontainer {
+    left: 195px;
+    bottom: 100px;
+    position: absolute;
+    float: left;
+}
+
+.response {
+    width: inherit;
+    float: left;
+}
+*/
