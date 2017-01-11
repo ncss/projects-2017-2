@@ -15,6 +15,11 @@ def index(response):
     template = render_file('templates/index.html', {"login": get_loggedin(response)})
     response.write(template)
 
+def is_valid_email(email):
+    LOCAL_REG = '^[\w\+\-\.]+'
+    DOMAIN_REG = '[a-zA-Z]+\.[a-zA-Z]+(\.[a-zA-Z]+)*'
+    if re.search(LOCAL_REG + '@' + DOMAIN_REG, email) is not None:
+        return email
 
 def is_valid_username(username):
     if re.search('^[a-zA-Z0-9.-]+$', username):
@@ -67,7 +72,7 @@ def user_post_register(response):
     password = response.get_field('password')
     email = response.get_field('email')
 
-    if is_valid_username(username) and password.strip() != '':
+    if is_valid_username(username) and is_valid_email(email) and password.strip() != '':
         try:
             Profiles.register(db, username, password, email)
             confirm_login_redirect(response, username, password)
@@ -110,4 +115,3 @@ server.register("/category/selection", category_get_selection, post=category_pos
 server.register('/photo/view', see_photo_and_response)
 server.register("/photo/upload", upload_photo_page)
 server.run()
-
