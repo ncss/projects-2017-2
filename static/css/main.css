@@ -47,6 +47,7 @@ body {
 
 #maincontent {
     width: 100%;
+    text-align: center;
 }
 
 footer {
@@ -156,4 +157,7 @@ input[type="submit"]{
 
 #categories {
     color: rgb(251, 140, 0);
+}
+#maincontent h1 {
+    font-size: 32px;
 }
