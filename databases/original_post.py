@@ -5,7 +5,7 @@ import re
 
 class OriginalPost(BasicInfo):
     def __init__(self, user, *args):
-        super().__init__(user, *args)
+        super(OriginalPost, self).__init__(user, *args)
 
     def __repr__(self):
         return "OriginalPost("+",".join(map(str,[self.id,self.user,self.reply_to,self.contents,self.date]))+")"
@@ -77,4 +77,4 @@ class OriginalPost(BasicInfo):
         for file in os.listdir('static/images/'):
             ext = re.match(str(self.id)+'(\..*)',file)
             if ext:
-                return 'static/images/'+str(self.id)+ext.group(1)
+                return '/static/images/'+str(self.id)+ext.group(1)

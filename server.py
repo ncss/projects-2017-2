@@ -138,7 +138,13 @@ def image_post_upload(response):
     else:
         username = username.decode()
         post = OriginalPost.create(db, Profiles.from_user(db, username).id, content)
-        print(post)
+        #print(post)
+        post_categories = []
+        for category in CATEGORIES:
+            if response.get_field(category):
+                post_categories.append(category)
+        print(post_categories)
+        OriginalPost.make_category_links(db, post.id, post_categories)
         path = "static/images/" + str(post.id) + "." + file_extension
         with open(path, "wb") as file:
             file.write(image)
