@@ -1,7 +1,4 @@
 from databases.Profiles import Profiles
-from databases.db import db
-
-sql = db()
 
 class BasicInfo:
     def __init__(self, user, *args):
@@ -10,7 +7,7 @@ class BasicInfo:
         self.date = args[5]
 
     @classmethod
-    def get(cls, id):
+    def get(cls, sql, id):
         sql.execute('''
         SELECT *
         FROM comments WHERE id=?
@@ -19,6 +16,5 @@ class BasicInfo:
         p = Profiles.from_id(id[1])
         return cls(p, *id)
 
-if __name__ == "__main__":
-    print(BasicInfo.get(1).contents)
+#print(BasicInfo.get(1).contents)
 

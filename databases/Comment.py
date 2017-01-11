@@ -1,8 +1,5 @@
 from databases.BasicInfo import BasicInfo
 from databases.Profiles import Profiles
-from databases.db import db
-
-sql = db()
 
 class Comment(BasicInfo):
     def __init__(self, user, *args):
@@ -10,7 +7,7 @@ class Comment(BasicInfo):
         self.reply_to = args[2]
 
     @classmethod
-    def CreateComment(cls, comment_id, user_id, reply_to, image_id, contents, date):
+    def create(cls, sql, comment_id, user_id, reply_to, image_id, contents, date):
         sql.execute('''
                 INSERT INTO comments VALUES (?, ?, ?, ?, ?, ?)
                 ''', (comment_id, user_id, reply_to, image_id, contents, date,))
@@ -18,5 +15,5 @@ class Comment(BasicInfo):
         return cls(p, comment_id, user_id, reply_to, image_id, contents, date)
 
 
-sql.open()
-print(Comment.CreateComment('18', '20520', '4', 'NULL', 'Hello', '12/1/14').contents)
+#sql.open()
+#print(Comment.create('18', '20520', '4', 'NULL', 'Hello', '12/1/14').contents)

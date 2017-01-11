@@ -1,22 +1,11 @@
 import sqlite3
 
-conn = None
-isopen = False
-
-def open():
-    global conn,isopen
-    conn = sqlite3.connect("databases/data.db")
-    isopen = True
-
-def close():
-    global conn
-    conn.close()
-
-class db:
-    def __init__(self):
-        if isopen is False:
-            open()
-        self.cur = conn.cursor()
+class Database:
+    def __init__(self,filepath):
+        #Create a connection to the database file
+        #Store it in a state E.G self.connection
+        self.conn = sqlite3.connect(filepath)
+        self.cur  = self.conn.cursor()
 
     def __repr__(self):
         return "db()"
@@ -25,7 +14,10 @@ class db:
         return "db object"
 
     def commit(self):
-        conn.commit()
+        self.conn.commit()
+
+    def close(self):
+        self.conn.close()
 
     def __getattr__(self, item):
         return self.cur.__getattribute__(item)
@@ -34,9 +26,11 @@ class db:
         return self.cur.__iter__()
 
 if __name__ == "__main__":
-    x = db()
+    x = Database('databases/data.db')
     # x.execute("INSERT INTO profiles VALUES (1234, 'testmeme', 'somesortofhashquestionmark', 'd@d.com');")
+
     print(x.execute("SELECT * FROM profiles").fetchall())
+
     for e in x:
         print(e)
     x.commit()
