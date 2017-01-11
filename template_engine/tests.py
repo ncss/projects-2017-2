@@ -111,3 +111,15 @@ assert_renders(
     {"b": [1, 2]},
     'this  1  2  and the other.'
 )
+
+assert_renders('{% safe value %}', {'value': '<html>'}, "<html>")
+
+assert_renders('{%safe value%}', {'value': '<html>'}, "<html>")
+
+assert_renders(
+    '{%safe value %}',
+    {'value': template_engine.GroupNode},
+    '<class \'template_engine.GroupNode\'>'
+)
+
+assert throws('{%safevalue%}', {'value': '<html>'}), 'no space after safe should fail'

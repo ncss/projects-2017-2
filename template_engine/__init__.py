@@ -36,6 +36,16 @@ class PythonNode:
         value = _evaluate_python(self.content, context)
         return html.escape(str(value))
 
+class SafeNode:
+    def __init__(self, content):
+        self.content = content.strip()
+
+    def __repr__(self):
+        return 'SafeNode({!r})'.format(self.content)
+
+    def eval(self, context):
+        return str(_evaluate_python(self.content, context))
+
 
 class TextNode:
     def __init__(self, content):
@@ -204,6 +214,8 @@ class Parser:
         self._consume_whitespace()
         if self.try_consume('include '):
             return self._parse_include()
+        elif self.try_consume('safe '):
+            return self._parse_safe()
         elif self.try_consume('if '):
             return self._parse_if()
         elif self.try_consume('endif '):
@@ -211,7 +223,7 @@ class Parser:
         elif self.try_consume('for '):
             return self._parse_for()
         elif self.try_consume('endfor'):
-            return self._parse_end()
+            self._parse_end()
         elif self.try_consume('else'):
             self._parse_else()
         elif self.try_consume('empty'):
@@ -272,6 +284,9 @@ class Parser:
 
     def _parse_python(self):
         return PythonNode(self._read_to("}}", "python"))
+
+    def _parse_safe(self):
+        return SafeNode(self._read_to("%}", "safe"))
 
     def _read_to(self, token, name="tag"):
         result = ""
