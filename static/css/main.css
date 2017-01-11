@@ -111,3 +111,15 @@ main {
 #headermenu a {
     color: black;
 }
+
+.wallphoto{
+    height:200px;
+    margin:5px;
+
+}
+
+#image-wall{
+    margin-left:auto;
+    margin-right:auto;
+
+}
