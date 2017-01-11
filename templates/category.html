@@ -1,24 +1,10 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		<title>Home page</title>
-	</head>
-	<body>
-		<h1>GENERIC WELCOME TEXT</h1>
-		<h3>You clicked on {{category}}</h3>
-		<form method="POST">
-			<ul>
-				<li>
-					<label><input type="radio" name="category" value="Man in business suit levitating" checked>Man in business suit levitating</label>
-				</li>
-				<li>
-					<label><input type="radio" name="category" value="Arabic prayer hyms">Arabic prayer hyms</label>
-				</li>
-				<li>
-					<label><input type="radio" name="category" value="LAMB SAUCE LOCATED">LAMB SAUCE LOCATED</label>
-				</li>
-			</ul>
-			<input type="submit">
-		</form>
-	</body>
-</html>
+{% include 'templates/header.html' %}
+<h1>{{category_name}}:</h1>
+<div id="image-wall">
+    {% for cur_post in images %}
+        <img src="{{ cur_post }}" class="wallphoto">
+    {% empty %}
+        <p>No images yet. You can upload one.</p>
+    {% endfor %}
+</div>
+{% include 'templates/footer.html' %}

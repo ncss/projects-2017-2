@@ -25,6 +25,25 @@ class OriginalPost(BasicInfo):
             original_post.append(OriginalPost(p,*a))
         return original_post
 
+    @staticmethod
+    def get_posts_with_category(sql, category_name, skip=0):
+        sql.execute('''
+        SELECT *
+        FROM comments
+        WHERE id in (
+            SELECT comment_id
+            FROM categorylink
+            WHERE category_name = ?
+        )
+        ''', (category_name,))
+
+        results = sql.fetchall()[skip:]
+        posts = []
+        for row in results:
+            profile = Profiles.from_id(sql, row[1])
+            posts.append(OriginalPost(profile, *row))
+        return posts
+
     @classmethod
     def create(cls,sql,user_id,contents):
         sql.execute('''
