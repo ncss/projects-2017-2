@@ -1,7 +1,7 @@
 {% include 'templates/header.html' %}
 
 <form method="POST" enctype="multipart/form-data">
-    {% if loged_in %}
+    {% if login %}
         <input type="file" name="upload" >
         <br/>
         <textarea name ="content">Request</textarea>
