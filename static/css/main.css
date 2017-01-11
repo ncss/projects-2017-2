@@ -83,6 +83,7 @@ a {
 }
 
 .headerbutton {
+    display: inline-block;
     text-decoration: none;
     background-color: #FFF3E0;
     font-size: 22px;
@@ -90,7 +91,7 @@ a {
     font-family: 'Roboto Condensed', sans-serif;
     padding: 10px;
     border-radius: 20px;
-    margin: 5px;
+    margin: 25px 5px 5px 5px;
 }
 
 .headerbutton:hover {
@@ -157,10 +158,8 @@ main {
 
 #headermenu {
     margin-left: 10px;
-    margin-right: 10px;
-    padding-right: 50px;
+    margin-right: 20px;
     vertical-align: middle;
-    line-height: 100px;
 }
 
 #headermenu a {
