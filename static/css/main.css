@@ -30,6 +30,11 @@ body {
     padding-top: 5px;
     flex: 0 1 auto;
 }
+
+#title a,#title a:visited,#title a:hover {
+    color:white;
+
+}
 #main {
     flex: 1 1 auto;
 }
