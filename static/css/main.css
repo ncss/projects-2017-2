@@ -95,9 +95,13 @@ a {
     color: white;
 }
 
-#nav ul {
+#nav ul p {
+    font-weight: bold;
+}
 
+#nav ul {
     list-style-type: none;
+    line-height: 1.2;
 }
 #nav ul a {
     color: black;
@@ -109,15 +113,15 @@ a {
 
 #popular a, #recent a {
     color: black;
+    font-size: 20px;
+    font-weight: bold;
+    margin: 5px;
+    line-height: 1.5;
 }
 
-ul > li > a {
+#nav ul > li > a {
     margin: 5px;
     color: black;
-}
-
-#nav  ul {
-    list-style-type: square;
 }
 
 #nav a:hover {
@@ -187,8 +191,9 @@ input[type="submit"]{
 
 #categories {
     color: rgb(251, 140, 0);
-    font-size: 25px;
+    font-size: 26px;
     text-align: center;
+    padding: 5px;
 }
 #maincontent h1 {
     font-size: 32px;
@@ -222,4 +227,9 @@ input[type="submit"]{
 .bigphoto {
     margin: 5px;
     height: 300px;
+}
+
+#sublist {
+    list-style: none;
+    margin-left: 15px;
 }
