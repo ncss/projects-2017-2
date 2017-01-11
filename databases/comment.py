@@ -2,8 +2,8 @@ from databases.basic_info import BasicInfo
 from databases.profiles import Profiles
 
 class Comment(BasicInfo):
-    def __init__(self, pkid, user, *args):
-        super().__init__(pkid, user, *args)
+    def __init__(self, user, *args):
+        super().__init__(user, *args)
 
     @classmethod
     def create(cls, sql, user_id, reply_to, contents):
@@ -19,7 +19,7 @@ class Comment(BasicInfo):
                FROM comments
                WHERE id=?''', (pkid,)).fetchone()[0]
 
-        return cls(pkid, user_id, reply_to, contents, date)
+        return cls(Profiles.from_id(sql, user_id), pkid, user_id, reply_to, contents, date)
 
 
 #sql.open()
