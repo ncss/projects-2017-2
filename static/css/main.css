@@ -56,6 +56,8 @@ body {
 #maincontent {
     width: 100%;
     text-align: center;
+    background-image: url("/static/images/lightpaperfibres.png");
+
 }
 
 footer {
@@ -83,6 +85,10 @@ a {
     padding: 10px;
     border-radius: 20px;
     margin: 5px;
+}
+
+.headerbutton > a:hover {
+    font-size: 100px;
 }
 
 .uploadbutton {
@@ -129,14 +135,12 @@ a {
     color: rgb(251, 140, 0);
 }
 
-
 #nav .uploadbutton > a:hover {
     color: black;
 }
 
 main {
     padding: 10px;
-    background-image: url("/static/images/lightpaperfibres.png");
 }
 
 #headermenu {
