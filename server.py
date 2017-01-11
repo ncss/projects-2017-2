@@ -104,14 +104,13 @@ def image_post_upload(response):
     file_extension = str(f[0]).split('.')[-1]
     image = f[2]  # Bytes
     content = response.get_field('content')
-    username = response.get_secure_cookie('username')
-    print(username)
+    username = response.get_secure_cookie('username').decode()
     if not username:
         response.write('Not Logged ')
     else:
         post = OriginalPost.create(db, Profiles.from_user(db, username).id, content)
         print(post)
-        path = "static/" + post.id + "." + file_extension
+        path = "static/" + str(post.id) + "." + file_extension
         with open(path, "wb") as file:
             file.write(image)
 
