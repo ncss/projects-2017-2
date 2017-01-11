@@ -26,7 +26,9 @@
 </div>
 <div id="main" class="row">
     <div id="nav">
+        {% if login %}
         <p class="uploadbutton"><a href="uploadphotos.html">Upload <i class="fa fa-upload" aria-hidden="true"></i></a></p>
+        {% endif %}
         <p id="recent"><a href="recent.html">Recent</a></p>
         <p id="popular"><a href="popular.html">Popular</a></p>
         <h2 id="categories">Categories</h2>
