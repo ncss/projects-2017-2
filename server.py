@@ -1,6 +1,7 @@
 from databases import Profiles
 from databases import Database
 from databases import OriginalPost
+from databases import Response
 from tornado.ncss import Server
 from template_engine.__init__ import render_file
 import re
@@ -17,7 +18,7 @@ def get_loggedin(response):
 
 def index(response):
 
-    template = render_file('templates/index.html', {"images": [p.get_image_path() for p in OriginalPost.get_posts(db)], "cur_post": None, "login": get_loggedin(response)})
+    template = render_file('templates/index.html', {"images": [(p.get_image_path(), p.id) for p in OriginalPost.get_posts(db)], "cur_post": None, "login": get_loggedin(response)})
     response.write(template)
 
 def is_valid_email(email):
@@ -102,8 +103,13 @@ def category_post_selection(response):
     template = render_file('templates/category.html', {'category': category, 'login': get_loggedin(response)})
     response.write(template)
 
-def see_photo_and_response(response):
-    template = render_file('templates/sketchresponse.html', {})
+
+def see_photo_and_response(response,post_id):
+    image = OriginalPost.from_id(db, post_id)
+    path = '/'+OriginalPost.from_id(db,post_id).get_image_path()
+    print(image.user.user)
+    template = render_file('templates/sketchresponse.html', {'image_url':path,'caption':image.contents,'login' : get_loggedin(response),'image_owner':image.user.user, 'post_id':post_id})
+
     response.write(template)
 
 
@@ -130,6 +136,31 @@ def image_post_upload(response):
             file.write(image)
         response.redirect("/")
 
+def response_get_upload(response, post_id):
+    username = response.get_secure_cookie('username')
+    template = render_file('templates/uploadphotos.html', {'message': '', 'login': username})
+    response.write(template)
+
+
+def response_post_upload(response, post_id):
+    f = response.get_file('upload')
+    file_extension = str(f[0]).split('.')[-1]
+    image = f[2]  # Bytes
+    content = response.get_field('content')
+    username = response.get_secure_cookie('username')
+    if not username:
+        template = render_file('templates/uploadphotos.html',
+                               {'message': 'You need to Log in first', 'login': username})
+        response.write(template)
+    else:
+        username = username.decode()
+        post = Response.create(db, Profiles.from_user(db, username).id, post_id, content)
+        print(post)
+        path = "static/images/" + str(post.id) + "." + file_extension
+        with open(path, "wb") as file:
+            file.write(image)
+        response.redirect("/")
+
 server = Server()
 server.register("/", index)
 server.register(r'/user/account/(\w+)', user_get_account)
@@ -137,7 +168,8 @@ server.register('/user/login', user_get_login, post=user_post_login)
 server.register('/user/register', user_get_register, post=user_post_register)
 server.register('/user/logout' , user_get_logout)
 server.register("/category/selection", category_get_selection, post=category_post_selection)
-server.register('/photo/view', see_photo_and_response)
-server.register("/photo/upload", image_get_upload, post=image_post_upload)
+server.register('/photo/view/(\w+)', see_photo_and_response)
+server.register('/photo/upload', image_get_upload, post=image_post_upload)
+server.register('/photo/response/upload/(\w+)', response_get_upload , post = response_post_upload)
 
 server.run()
