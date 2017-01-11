@@ -1,23 +1,25 @@
 {% include 'templates/header.html' %}
 <div id="enlargephoto">
     <div>
-        <img src="photograph.jpg" alt="Photograph" class="bigphoto">
-        <h2>Description</h2>
-        <p>@ username </p>
+        <img src="{{ image_url }}" alt="Photograph" class="bigphoto">
+        <h2>{{ caption }}</h2>
+        <p>@ {{ image_owner }}</p>
     </div>
 </div>
 
-<div id="slideshow">
-    <h1>Slide Show</h1>
-    {% for image in images %}
-        <img src="/static/images/{{image}}" alt="Response to photograph" class="smallsketch">
-        <!--<img src="sketch2.jpg" alt="Response to photograph" class="smallsketch">
-        <img src="sketch2.jpg" alt="Response to photograph" class="smallsketch">
-        <img src="sketch2.jpg" alt="Response to photograph" class="smallsketch">
-        <img src="sketch2.jpg" alt="Response to photograph" class="smallsketch">
-        <img src="sketch2.jpg" alt="Response to photograph" class="smallsketch">-->
-    {% endfor %}
+<a href="/photo/response/upload/{{ post_id }}">
+    <input type="submit" value = "Upload Response"/>
+</a>
+
+<div >  
+    <h1>Responses</h1>  
+    {% for response in responses %}  
+    <img src = '/{{response[0]}}' width="300em"/> 
+
+    <p>{{ response[1] }}</p>
+    <br>
+    {% endfor %}  
 </div>
 
-<a href="/photo/view}">Photos</a>
-{% include 'templates/footer.shtml' %}
+
+{% include 'templates/footer.html' %}
