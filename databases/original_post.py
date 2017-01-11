@@ -1,8 +1,5 @@
 from databases.basic_info import BasicInfo
 from databases.profiles import Profiles
-from databases.db import db
-
-sql = db()
 
 class OriginalPost(BasicInfo):
     def __init__(self, user, *args):
@@ -10,7 +7,7 @@ class OriginalPost(BasicInfo):
         self.image_id = args[3]
 
     @staticmethod
-    def GetPosts(skip):
+    def GetPosts(sql,skip):
         sql.execute('''
         SELECT *
         FROM comments
@@ -23,4 +20,4 @@ class OriginalPost(BasicInfo):
             original_post.append(OriginalPost(p,*a))
         return original_post
 
-OriginalPost.GetPosts(1)
+#OriginalPost.GetPosts(1)
