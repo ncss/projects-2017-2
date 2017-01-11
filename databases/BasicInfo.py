@@ -1,25 +1,25 @@
+from databases.Profiles import Profiles
+import databases.db
 import sqlite3
-conn = sqlite3.connect('data.db')
-cur = conn.cursor()
+
+sql = databases.db.db()
 
 class BasicInfo():
-    def __init__(self, username, contents, date):
-        self.username = username
-        self.contents = contents
-        self.date = date
+    def __init__(self, user, *args):
+        self.user = user
+        self.contents = args[4]
+        self.date = args[5]
 
     @classmethod
     def get(cls, id):
-        cur.execute('''
+        sql.execute('''
         SELECT *
         FROM comments WHERE id=?
         ''', (id,))
-        print(cur.fetchone())
-        return cls()
+        id = sql.fetchone()
+        p = Profiles.from_id(id[1])
+        return cls(p, *id)
 
-BasicInfo.get(1)
+if __name__ == "__main__":
+    print(BasicInfo.get(1).contents)
 
-cur.execute('''
-        SELECT username
-        FROM profiles WHERE id=?
-        ''', (id,))
