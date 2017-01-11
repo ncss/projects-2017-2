@@ -1,5 +1,6 @@
 from tornado.ncss import Server
 from template_engine.__init__ import render_file
+import os
 import re
 
 
@@ -83,12 +84,16 @@ def image_get_upload(response):
 def image_post_upload(response):
     f = response.get_file('upload')
     file_extension = str(f[0]).split('.')[-1]
-    file = f[2] #Bytes
+    image = f[2]  # Bytes
     content = response.get_field('content')
     username = response.get_secure_cookie('username')
     if username is None:
         response.write('Not Logged ')
-    OriginalPost.create(db, Profiles.from_user(username).id, file, file_extension, content)
+    # post = OriginalPost.create(db, Profiles.from_user(username).id, content)
+
+    path = "static/" + "222" + "." + file_extension
+    with open(path, "wb") as file:
+        file.write(image)
 
 
 server = Server()
