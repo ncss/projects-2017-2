@@ -14,12 +14,17 @@ body {
     font-family: 'Roboto Condensed', sans-serif;
     font-size: 18px;
 }
-#title {
+/*#title {
     font-family: 'Euphoria Script', cursive;
     font-size: 100px;
     font-weight: 100px;
-}
+}*/
 
+#title img {
+    width: 200px;
+    height: 80px;
+    margin-top: 5px;
+}
 #header{
     background-color: rgb(251, 140, 0);
     color: #FFF3E0;
@@ -30,10 +35,10 @@ body {
     flex: 0 1 auto;
 }
 
-#title a,#title a:visited,#title a:hover {
+/*#title a,#title a:visited,#title a:hover {
     color:white;
+}*/
 
-}
 #main {
     flex: 1 1 auto;
 }
