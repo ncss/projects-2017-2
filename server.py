@@ -32,13 +32,12 @@ def is_valid_username(username):
     else:
         return False
 
-def user_get_account(response, username):
+def user_get_account(response):
     loggedin = get_loggedin(response)
-    if username == loggedin:
-        template = render_file('templates/account.html', {'login': loggedin})
-        response.write(template)
-    else:
-        response.redirect('/user/login')
+    template = render_file('templates/account.html', {'login': loggedin})
+    response.write(template)
+    #else:
+    #    response.redirect('/user/login')
 
 def confirm_login_redirect(response, username, password):
     try:
@@ -132,7 +131,7 @@ def image_post_upload(response):
 
 server = Server()
 server.register("/", index)
-server.register(r'/user/account/(\w+)', user_get_account)
+server.register(r'/user/account/', user_get_account)
 server.register('/user/login', user_get_login, post=user_post_login)
 server.register('/user/register', user_get_register, post=user_post_register)
 server.register('/user/logout' , user_get_logout)
