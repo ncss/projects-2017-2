@@ -105,9 +105,8 @@ def see_photo_and_response(response):
 
 def image_get_upload(response):
     username = response.get_secure_cookie('username')
-    template = render_file('templates/uploadphotos.html', {'message': '', 'loged_in':username})
+    template = render_file('templates/uploadphotos.html', {'message': '', 'login':username})
     response.write(template)
-
 
 def image_post_upload(response):
     f = response.get_file('upload')
@@ -137,4 +136,5 @@ server.register('/user/logout' , user_get_logout)
 server.register("/category/selection", category_get_selection, post=category_post_selection)
 server.register('/photo/view', see_photo_and_response)
 server.register("/photo/upload", image_get_upload, post=image_post_upload)
+
 server.run()
