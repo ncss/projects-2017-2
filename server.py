@@ -115,7 +115,7 @@ def image_post_upload(response):
     content = response.get_field('content')
     username = response.get_secure_cookie('username')
     if not username:
-        template = render_file('templates/uploadphotos.html', {'message': 'You need to Log in first6'})
+        template = render_file('templates/uploadphotos.html', {'message': 'You need to Log in first', 'login':username})
         response.write(template)
     else:
         username = username.decode()
