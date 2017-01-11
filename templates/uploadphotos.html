@@ -1,10 +1,11 @@
 {% include 'templates/header.html' %}
-
+<h1>Upload Photo</h1><br>
+<br>
 <form action="/save_file" method=post" enctype="multipart/form-data">
     <input type="file" name="attachment">
-</form>
-<p>Display Chosen File name</p>
+</form><br>
+<p>Caption your photo</p>
 <textarea>Caption & Request</textarea>
-<input type="submit" value="Upload">
+<p><input type="submit" value="Upload"></p>
 
 {% include 'templates/footer.html' %}
