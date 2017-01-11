@@ -1,20 +1,18 @@
 {% include 'templates/header.html' %}
 
-<h1>LOGIN</h1>
+<h1>Login</h1>
 <br>
 <br>
 
 <form method="post">
   Username<br>
-  <input type="text" name="username"/><br>
+  <input type="text" name="username"/><br><br>
   Password<br>
   <input type="password" name="password"/><br>
     <input type="submit" value="Submit"/>
 </form>
-<br>
 <h2 id="ormessage">OR</h2>
-<br>
 <p><a href="/user/register" id="registerbutton">Register</a></p>
 <p>{{message}}</p>
-
+<br>
 {% include 'templates/footer.html' %}
