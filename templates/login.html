@@ -1,12 +1,20 @@
+{% include 'templates/header.html' %}
+
+<h1>LOGIN</h1>
+<br>
+<br>
+
 <form method="post">
-    Enter your username:
-    <input type="text" name="username"/>
-    Enter Your Password:
-    <input type="password" name="password"/>
-    <input type="submit"/>
+  Username<br>
+  <input type="text" name="username"/><br>
+  Password<br>
+  <input type="password" name="password"/><br>
+    <input type="submit" value="Submit"/>
 </form>
-
-Don't have an account?
-<a href="/user/register">Register</a>
-
+<br>
+<h2 id="ormessage">OR</h2>
+<br>
+<p><a href="/user/register" id="registerbutton">Register</a></p>
 <p>{{message}}</p>
+
+{% include 'templates/footer.html' %}
