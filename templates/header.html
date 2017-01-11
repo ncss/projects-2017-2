@@ -13,8 +13,12 @@
         <h1>Draw.This</h1>
     </div>
     <div id="headermenu">
-        <p class="headerbutton"><a href="account.html">Account <i class="fa fa-user" aria-hidden="true"></i></a></p>
-        <p class="headerbutton"><a href="login.html">Login <i class="fa fa-lock" aria-hidden="true"></i></a></p>
+        <p class="headerbutton"><a href="/user/account">Account <i class="fa fa-user" aria-hidden="true"></i></a></p>
+        {% if login %}
+        <p class="headerbutton"><a href="/user/logout">Logout <i class="fa fa-lock" aria-hidden="true"></i></a></p>
+        {% else %}
+        <p class="headerbutton"><a href="/user/login">Login <i class="fa fa-lock" aria-hidden="true"></i></a></p>
+        {% endif %}
     </div>
 </div>
 <div id="main" class="row">
