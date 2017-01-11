@@ -209,8 +209,7 @@ input[type="submit"]{
 #categories {
     color: rgb(251, 140, 0);
     font-size: 26px;
-    text-align: center;
-    padding: 5px;
+    padding: 5px 5px 5px 0px;
 }
 #maincontent h1 {
     font-size: 32px;
@@ -242,8 +241,8 @@ input[type="submit"]{
 }
 
 .bigphoto {
-    margin: 5px;
-    height: 300px;
+    margin: 10px;
+    width: 75%;
 }
 
 .sublist {
@@ -253,4 +252,9 @@ input[type="submit"]{
 
 .fa-pencil {
     font-size: 80px !important;
+}
+
+.response-img{
+    float:left;
+    padding: 10px;
 }

@@ -3,23 +3,28 @@
     <div>
         <img src="{{ image_url }}" alt="Photograph" class="bigphoto">
         <h2>{{ caption }}</h2>
-        <p>@ {{ image_owner }}</p>
+        <p>by {{ image_owner }}</p>
     </div>
 </div>
 
+{% if login %}
 <a href="/photo/response/upload/{{ post_id }}">
     <input type="submit" value = "Upload Response"/>
 </a>
+{% endif %}
 
-<div >  
+<div>  
     <h1>Responses</h1>  
-    {% for response in responses %}  
-    <img src = '/{{response[0]}}' width="300em"/> 
+    <div id="responses">
+        {% for response in responses %}  
+        <div class="response-img">
+            <img src = '/{{response[0]}}' width="300em"/> 
 
-    <h3>{{ response[1] }}</h3>
-    <p>@ {{ response[2].user }}</p>
-    <br>
-    {% endfor %}  
+            <h3>{{ response[1] }}</h3>
+            <p>by {{ response[2].user }}</p>
+        </div>
+        {% endfor %}  
+    </div>
 </div>
 
 

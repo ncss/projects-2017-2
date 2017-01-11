@@ -1,5 +1,4 @@
 {% include 'templates/header.html' %}
-<h1>Image Wall</h1>
 <div id="image-wall">
     {% for cur_post in images %}
        <a href="/photo/view/{{ cur_post[1] }}" > <img src="{{ cur_post[0] }}" class="wallphoto"></a>
