@@ -1,0 +1,180 @@
+@import url('https://fonts.googleapis.com/css?family=Euphoria+Script|Open+Sans');
+@import url("http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css");
+@import url('https://fonts.googleapis.com/css?family=Patrick+Hand');
+
+html{
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-flow: column;
+    width: 100%;
+    height: 100%;
+    font-family: 'Patrick Hand', cursive;
+    font-size: 18px;
+}
+#title {
+    font-family: 'Euphoria Script', cursive;
+    font-size: 100px;
+    font-weight: 100px;
+}
+
+#header{
+    background-color: rgb(251, 140, 0);
+    color: #FFF3E0;
+    width: 100%;
+    height: 100px;
+    justify-content: space-between;
+    padding-left: 10px;
+    padding-top: 5px;
+    flex: 0 1 auto;
+}
+#main {
+    flex: 1 1 auto;
+}
+
+#nav {
+    vertical-align: top;
+    display: inline-block;
+    background-color: rgb(255, 224, 178);
+    width: 175px;
+    padding: 10px;
+    font-family: 'Patrick Hand', cursive;
+    font-size: 20px;
+}
+.row {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+
+#maincontent {
+    width: 100%;
+    text-align: center;
+}
+
+footer {
+    background-color: rgb(251, 140, 0);
+    width: 100%;
+    height: 30px;
+}
+
+footer p {
+    padding: 5px;
+}
+
+a {
+    text-decoration: none;
+}
+
+.headerbutton {
+    text-decoration: none;
+    background-color: #FFF3E0;
+    font-size: 22px;
+    text-align: center;
+    font-family: 'Patrick Hand', cursive;
+    padding: 10px;
+    border-radius: 20px;
+    margin: 5px;
+}
+
+.uploadbutton {
+    background-color: rgb(251, 140, 0);
+    padding: 5px;
+    text-align: center;
+    border-radius: 10px;
+    margin: 5px;
+}
+
+.uploadbutton > a {
+    color: white;
+}
+#nav ul {
+
+    list-style-type: none;
+}
+#nav ul a {
+    color: black;
+}
+
+#nav p {
+    margin: 5px;
+}
+
+#popular a, #recent a {
+    color: black;
+}
+
+ul > li > a {
+    margin: 5px;
+    color: black;
+}
+
+#nav a:hover {
+    color: rgb(251, 140, 0);
+}
+
+main {
+    padding: 10px;
+    background-image: url("/static/images/lightpaperfibres.png");
+}
+
+#headermenu {
+    margin-left: 10px;
+    margin-right: 5px;
+    padding-right: 5px;
+}
+
+#headermenu a {
+    color: black;
+}
+
+.wallphoto{
+    height:200px;
+    margin:5px;
+
+}
+
+#image-wall{
+    margin-left:auto;
+    margin-right:auto;
+
+}
+
+input[type="submit"]{
+    background-color: rgb(251, 140, 0);
+    padding: 5px 10px;
+    text-align: center;
+    border-radius: 10px;
+    margin: 5px;
+    border-style: none;
+    color: white;
+    font-family: 'Patrick Hand', cursive;
+    font-size: 18px;
+}
+
+#registerbutton {
+    background-color: rgb(251, 140, 0);
+    padding: 5px 10px;
+    text-align: center;
+    border-radius: 10px;
+    margin: 15px;
+    border-style: none;
+    color: white;
+    font-size: 14px;
+}
+
+#ormessage {
+    margin-bottom: 10px;
+}
+
+#categories {
+    color: rgb(251, 140, 0);
+    font-size: 25px;
+    text-align: center;
+}
+#maincontent h1 {
+    font-size: 32px;
+}
