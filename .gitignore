@@ -97,5 +97,3 @@ data.db
 # Pycharm specific files removal
 .idea
 
-# Uploaded images
-static/images/*
