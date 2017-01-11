@@ -22,9 +22,24 @@ def is_valid_username(username):
 
 
 def user_get_account(response, username):
-    template = render_file('templates/account.html', {'name': username})
-    response.write(template)
+    loggedin = response.get_secure_cookie('username')
+    print(username, loggedin)
+    if username.encode('UTF8') == loggedin:
+        template = render_file('templates/account.html', {'name': username})
+        response.write(template)
+    else:
+        response.redirect('/user/login')
 
+def confirm_login_redirect(response, username, password):
+    try:
+        Profiles.login(db, username, password)
+        response.set_secure_cookie('username', username)
+        response.redirect('/')
+        print('Logging in as ' + username)
+    except ValueError as error:
+        print(error)
+        template = render_file('templates/login.html', {'message': error})
+        response.write(template)
 
 def user_get_login(response):
     template = render_file('templates/login.html', {'message': ''})
@@ -36,15 +51,9 @@ def user_post_login(response):
     password = response.get_field('password')
 
     if is_valid_username(username) and password.strip() != '':
-        try:
-            Profiles.login(db, username, password)
-            response.redirect('/user/account/{}'.format(username))
-        except ValueError as error:
-            print(error)
-            template = render_file('templates/login.html', {'message': error})
-            response.write(template)
+        confirm_login_redirect(response, username, password)
     else:
-        template = render_file('templates/login.html', {'message': 'Ha ha!\nIncorrect login details.'})
+        template = render_file('templates/login.html', {'message': 'Incorrect login details.'})
         response.write(template)
 
 
@@ -61,7 +70,7 @@ def user_post_register(response):
     if is_valid_username(username) and password.strip() != '':
         try:
             Profiles.register(db, username, password, email)
-            response.write(username + ' registered!')
+            confirm_login_redirect(response, username, password)
         except ValueError as error:
             template = render_file('templates/register.html', {'message': error})
             response.write(template)
@@ -69,6 +78,9 @@ def user_post_register(response):
         template = render_file('templates/register.html', {'message': 'Invalid Username or Password'})
         response.write(template)
 
+def user_get_logout(response):
+    response.clear_cookie('username')
+    response.redirect("/")
 
 def category_get_selection(response):
     template = render_file('templates/category.html', {})
@@ -86,5 +98,6 @@ server.register("/", index)
 server.register(r'/user/account/(\w+)', user_get_account)
 server.register('/user/login', user_get_login, post=user_post_login)
 server.register('/user/register', user_get_register, post=user_post_register)
+server.register('/user/logout' , user_get_logout)
 server.register("/category/selection", category_get_selection, post=category_post_selection)
 server.run()
