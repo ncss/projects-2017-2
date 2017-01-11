@@ -21,10 +21,10 @@ INSERT INTO profiles VALUES ( 20520, "Becky", "idIfg34rer", "BeckyWilda@coles.co
 
 
 --(name, category_id)
-INSERT INTO categories VALUES ("Landscape", "1")
-INSERT INTO categories VALUES ("Figure", "2")
-INSERT INTO categories VALUES ("Still Life", "3")
-INSERT INTO categories VALUES ("Patterns", "4")
-INSERT INTO categories VALUES ("Architecture", "5")
+INSERT INTO categories VALUES ("Landscape", "1");
+INSERT INTO categories VALUES ("Figure", "2");
+INSERT INTO categories VALUES ("Still Life", "3");
+INSERT INTO categories VALUES ("Patterns", "4");
+INSERT INTO categories VALUES ("Architecture", "5");
 
 COMMIT;
