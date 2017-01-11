@@ -17,7 +17,7 @@ class OriginalPost(BasicInfo):
         SELECT *
         FROM comments
         WHERE reply_id IS NULL
-        ORDER BY date;''')
+        ORDER BY date DESC;''')
 
         results = sql.fetchall()[skip:]
         original_post = []
@@ -44,6 +44,7 @@ class OriginalPost(BasicInfo):
             FROM categorylink
             WHERE category_name = ?
         )
+        ORDER BY date DESC
         ''', (category_name,))
 
         results = sql.fetchall()[skip:]
@@ -81,9 +82,11 @@ class OriginalPost(BasicInfo):
                 ''',
                 (category, comment_id)
             )
+            sql.commit()
 
     def get_image_path(self):
         for file in os.listdir('static/images/'):
             ext = re.match(str(self.id)+'(\..*)',file)
             if ext:
                 return 'static/images/'+str(self.id)+ext.group(1)
+
