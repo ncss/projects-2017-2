@@ -1,3 +1,4 @@
+from databases.Profiles import Profiles
 from tornado.ncss import Server
 from template_engine.__init__ import render_file
 import re
@@ -12,7 +13,7 @@ def index(response):
 
 
 def is_valid_username(username):
-    if re.search('^[a-zA-Z0-9-.]+$', username):
+    if re.search('^[a-zA-Z0-9.-]+$', username):
         return True
     else:
         return False
@@ -33,22 +34,20 @@ def user_post_login(response):
     password = response.get_field('password')
 
     if is_valid_username(username) and password.strip() != '':
-        # TODO: Add Database Check and redirect page
-        """
         try:
-            user = Profiles.login(username, password)
+            Profiles.login(username, password)
+            response.redirect('/user/account/{}'.format(username))
         except ValueError as error:
             print(error)
-        """
-        response.redirect('/user/account/{}'.format(username))
-
+            template = render_file('templates/login.html', {'message': error})
+            response.write(template)
     else:
         template = render_file('templates/login.html', {'message': 'Ha ha!\nIncorrect login details.'})
         response.write(template)
 
 
 def user_get_register(response):
-    template = render_file('templates/register.html', {})
+    template = render_file('templates/register.html', {'message':''})
     response.write(template)
 
 
@@ -58,10 +57,15 @@ def user_post_register(response):
     email = response.get_field('email')
 
     if is_valid_username(username) and password.strip() != '':
-        # TODO: Add Database Check and redirect page
-        response.write(username + ' registered!')
+        try:
+            Profiles.register(username, password, email)
+            response.write(username + ' registered!')
+        except ValueError as error:
+            template = render_file('templates/register.html', {'message': error})
+            response.write(template)
     else:
-        response.write('No password or username')
+        template = render_file('templates/register.html', {'message': 'Invalid Username or Password'})
+        response.write(template)
 
 
 def category_get_selection(response):
