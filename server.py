@@ -7,7 +7,6 @@ import re
 def index(response):
     loggedin = response.get_secure_cookie('username')
     print(loggedin)
-    print("COOKIE")
     template = render_file('templates/index.html', {})
     response.write(template)
 
