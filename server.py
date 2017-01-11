@@ -2,7 +2,7 @@ from databases import Profiles
 from databases import Database
 from tornado.ncss import Server
 from template_engine.__init__ import render_file
-import os
+from databases import OriginalPost
 import re
 
 db = Database('databases/data.db')
@@ -105,13 +105,15 @@ def image_post_upload(response):
     image = f[2]  # Bytes
     content = response.get_field('content')
     username = response.get_secure_cookie('username')
-    if username is None:
+    print(username)
+    if not username:
         response.write('Not Logged ')
-    # post = OriginalPost.create(db, Profiles.from_user(username).id, content)
-
-    path = "static/" + "222" + "." + file_extension
-    with open(path, "wb") as file:
-        file.write(image)
+    else:
+        post = OriginalPost.create(db, Profiles.from_user(db, username).id, content)
+        print(post)
+        path = "static/" + post.id + "." + file_extension
+        with open(path, "wb") as file:
+            file.write(image)
 
 
 server = Server()
@@ -121,5 +123,5 @@ server.register('/user/login', user_get_login, post=user_post_login)
 server.register('/user/register', user_get_register, post=user_post_register)
 server.register('/user/logout' , user_get_logout)
 server.register("/category/selection", category_get_selection, post=category_post_selection)
-server.register("/upload", image_get_upload, post=image_post_upload)
+server.register("/photo/upload", image_get_upload, post=image_post_upload)
 server.run()
