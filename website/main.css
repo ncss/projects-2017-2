@@ -23,7 +23,8 @@ body {
     width: 100%;
     height: 100px;
     justify-content: space-between;
-
+    padding-left: 10px;
+    padding-top: 5px;
     flex: 0 1 auto;
 }
 #main {
@@ -51,15 +52,20 @@ body {
 footer {
     background-color: rgb(251, 140, 0);
     width: 100%;
-
+    height: 30px;
 }
+
+footer p {
+    padding: 5px;
+}
+
 a {
     text-decoration: none;
 }
 
 .headerbutton {
     text-decoration: none;
-    background-color: white;
+    background-color: #FFF3E0;
     font-size: 20px;
     text-align: center;
     font-family: 'Open Sans', sans-serif;
@@ -93,4 +99,14 @@ ul > li > a {
 
 main {
     padding: 10px;
+}
+
+#headermenu {
+    margin-left: 10px;
+    margin-right: 5px;
+    padding-right: 5px;
+}
+
+#headermenu a {
+    color: black;
 }
