@@ -146,3 +146,5 @@ assert throws('{% for a, in b %} {{a}} {% endfor %}', {'b': [1, 2]}), 'comma fol
 
 assert throws('{% for a, b in c %} {{a}} {% endfor %}', {'c': [(1, 2, 3), (4, 5, 6)]}),\
     'incorrect number of tuples to unpack should fail'
+
+assert_renders('{% for a in b %} {{a}} {% endfor %}', {'b': []}, '')

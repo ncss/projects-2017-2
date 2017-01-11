@@ -145,7 +145,10 @@ class ForNode:
                 current_context[self.item_tuple[0]] = element
             content += self.for_group.eval(current_context)
         if not looped:
-            content += self.empty_group.eval(context)
+            if self.empty_group is not None:
+                content += self.empty_group.eval(context)
+            else:
+                content += ""
         return content
 
 
