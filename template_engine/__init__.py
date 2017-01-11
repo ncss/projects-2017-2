@@ -89,8 +89,29 @@ class IfNode:
 
 
 class ForNode:
-    def __init(self):
-        pass
+    def __init__(self, item, sequence, group):
+        self.item = item
+        self.sequence = sequence
+        self.group = group
+
+    def __repr__(self):
+        return 'ForNode({!r}, {!r}, {!r})'.format(self.item, self.sequence, self.group)
+
+    def eval(self, context):
+        content = ""
+        try:
+            iterable = context[self.sequence]
+        except KeyError:
+            raise TemplateError('could not parse for tag, iterable {} not in context'.format(self.sequence))
+        try:
+            iter(iterable)
+        except TypeError:
+            raise TemplateError('{} is not iterable'.format(self.sequence))
+        for element in iterable:
+            current_context = context.copy()
+            current_context[self.item] = element
+            content += self.group.eval(current_context)
+        return content
 
 
 class Parser:
@@ -161,6 +182,8 @@ class Parser:
             self._parse_end()
         elif self.try_consume('for '):
             return self._parse_for()
+        elif self.try_consume('endfor'):
+            return self._parse_end()
         else:
             raise TemplateError('unknown tag')
 
@@ -183,16 +206,19 @@ class Parser:
     def _parse_end(self):
         self._consume_whitespace()
         if not self.try_consume('%}'):
-            raise TemplateError('expected \'%}\' at end of endif tag')
-        raise EndGroupException('unexpected endif tag')
+            raise TemplateError('expected \'%}\' at end of tag')
+        raise EndGroupException('unexpected end tag')
         # its not really always unexpected
 
     def _parse_for(self):
         self._consume_whitespace()
-        iterator = self._read_to(' ', 'for')
+        item = self._read_to(' ', 'for')
+        self._consume_whitespace()
         if not self.try_consume('in '):
-            raise TemplateError('expected\'in \' after {}'.format(iterator))
-        # left off here
+            raise TemplateError('expected\'in \' after {}'.format(item))
+        sequence = self._read_to("%}", "for").strip()
+        group = self._parse_group('endfor')
+        return ForNode(item, sequence, group)
 
 
     def _parse_text(self):
