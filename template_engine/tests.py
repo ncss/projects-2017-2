@@ -114,7 +114,7 @@ assert_renders(
 
 assert_renders('{% safe value %}', {'value': '<html>'}, "<html>")
 
-assert_renders('{%safe value%}', {'value': '<html>'}, "<html>")
+assert_renders('{%        safe value%}', {'value': '<html>'}, "<html>")
 
 assert_renders(
     '{%safe value %}',
@@ -123,3 +123,15 @@ assert_renders(
 )
 
 assert throws('{%safevalue%}', {'value': '<html>'}), 'no space after safe should fail'
+
+assert_renders('{% comment %}asfgasdfasdfa{% endcomment %}', {}, '')
+
+assert_renders('{%comment%}{% asdfasdfasdf %}{%endcomment         %}', {}, '')
+
+assert_renders('start{%comment%}{% asdfasdfasdf %}{%endcomment%}end', {}, 'startend')
+
+assert_renders('{%comment%}{% if True %}chicken{%endif%}{%endcomment%}', {}, '')
+
+assert throws('{%comment%}{% if True %}chicken{%endcomment%}{%endif%}', {}), 'tags should be invalid inside comment'
+
+assert throws('{% if True %}{%comment%}chicken{%endif%}{%endcomment%}', {}), 'tags should be invalid inside comment'

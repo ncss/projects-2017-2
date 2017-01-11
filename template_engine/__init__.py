@@ -58,6 +58,11 @@ class TextNode:
         return self.content
 
 
+class CommentNode:
+    def eval(self, context):
+        return ""
+
+
 class GroupNode:
     def __init__(self, nodes):
         self.nodes = nodes
@@ -218,7 +223,7 @@ class Parser:
             return self._parse_safe()
         elif self.try_consume('if '):
             return self._parse_if()
-        elif self.try_consume('endif '):
+        elif self.try_consume('endif'):
             self._parse_end()
         elif self.try_consume('for '):
             return self._parse_for()
@@ -228,6 +233,8 @@ class Parser:
             self._parse_else()
         elif self.try_consume('empty'):
             self._parse_empty()
+        elif self.try_consume('comment'):
+            return self._parse_comment()
         else:
             raise TemplateError('unknown tag')
 
@@ -287,6 +294,17 @@ class Parser:
 
     def _parse_safe(self):
         return SafeNode(self._read_to("%}", "safe"))
+
+    def _parse_comment(self):
+        self._end_tag('comment')
+        while True:
+            self._read_to('{%', 'comment')
+            self._consume_whitespace()
+            if self.try_consume('endcomment'):
+                self._consume_whitespace()
+                if self.try_consume('%}'):
+                    break
+        return CommentNode()
 
     def _read_to(self, token, name="tag"):
         result = ""
