@@ -57,6 +57,7 @@ body {
 #maincontent {
     width: 100%;
     text-align: center;
+    background-image: url("/static/images/lightpaperfibres.png");
     position: relative;
 }
 
@@ -88,6 +89,10 @@ a {
     margin: 5px;
 }
 
+.headerbutton > a:hover {
+    font-size: 100px;
+}
+
 .uploadbutton {
     background-color: rgb(251, 140, 0);
     padding: 5px;
@@ -101,7 +106,6 @@ a {
 }
 
 #nav ul p {
-    font-weight: bold;
 }
 
 #nav ul {
@@ -133,14 +137,12 @@ a {
     color: rgb(251, 140, 0);
 }
 
-
 #nav .uploadbutton > a:hover {
     color: black;
 }
 
 main {
     padding: 10px 10px 50px 10px;
-    background-image: url("/static/images/lightpaperfibres.png");
     overflow-y:scroll;
     position: absolute;
     top: 0px;
