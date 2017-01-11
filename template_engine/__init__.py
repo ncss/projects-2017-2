@@ -36,6 +36,16 @@ class PythonNode:
         value = _evaluate_python(self.content, context)
         return html.escape(str(value))
 
+class SafeNode:
+    def __init__(self, content):
+        self.content = content.strip()
+
+    def __repr__(self):
+        return 'SafeNode({!r})'.format(self.content)
+
+    def eval(self, context):
+        return str(_evaluate_python(self.content, context))
+
 
 class TextNode:
     def __init__(self, content):
@@ -46,6 +56,11 @@ class TextNode:
 
     def eval(self, context):
         return self.content
+
+
+class CommentNode:
+    def eval(self, context):
+        return ""
 
 
 class GroupNode:
@@ -93,13 +108,14 @@ class IfNode:
 
 
 class ForNode:
-    def __init__(self, item, sequence, group):
+    def __init__(self, item, sequence, for_group, empty_group):
         self.item = item
         self.sequence = sequence
-        self.group = group
+        self.for_group = for_group
+        self.empty_group = empty_group
 
     def __repr__(self):
-        return 'ForNode({!r}, {!r}, {!r})'.format(self.item, self.sequence, self.group)
+        return 'ForNode({!r}, {!r}, {!r})'.format(self.item, self.sequence, self.for_group, self.empty_group)
 
     def eval(self, context):
         content = ""
@@ -111,10 +127,14 @@ class ForNode:
             iter(iterable)
         except TypeError:
             raise TemplateError('{} is not iterable'.format(self.sequence))
+        looped = False
         for element in iterable:
+            looped = True
             current_context = context.copy()
             current_context[self.item] = element
-            content += self.group.eval(current_context)
+            content += self.for_group.eval(current_context)
+        if not looped:
+            content += self.empty_group.eval(context)
         return content
 
 
@@ -168,24 +188,24 @@ class Parser:
                 raise TemplateError('expected {}'.format(terminal_tag))
         return GroupNode(nodes)
 
-    def _parse_else_group(self, terminal_tag=None):
+    def _parse_else_or_empty_group(self, terminal_tag=None):
         """
-        Returns two groups, one for the true case, one for the false case.
-        Second group may be None if no else tag.
+        Returns two groups, one that is prior to the else or empty tag (if there one, otherwise it is the whole thing),
+        and another, which is after the else or empty tag, unless there isn't one, in which case it is None.
         """
         nodes = []
         try:
             while self.peek() is not None:
                 nodes.append(self._parse_node())
         except EndGroupException:
-            true_group = GroupNode(nodes)
-            false_group = None
-        except ElseException:
-            true_group = GroupNode(nodes)
-            false_group = self._parse_group(terminal_tag)
+            first_group = GroupNode(nodes)
+            second_group = None
+        except (ElseException, EmptyException):
+            first_group = GroupNode(nodes)
+            second_group = self._parse_group(terminal_tag)
         else:
             raise TemplateError('expected {}'.format(terminal_tag))
-        return true_group, false_group
+        return first_group, second_group
 
     def _parse_node(self):
         if self.try_consume("{{"):
@@ -199,16 +219,22 @@ class Parser:
         self._consume_whitespace()
         if self.try_consume('include '):
             return self._parse_include()
+        elif self.try_consume('safe '):
+            return self._parse_safe()
         elif self.try_consume('if '):
             return self._parse_if()
-        elif self.try_consume('endif '):
+        elif self.try_consume('endif'):
             self._parse_end()
         elif self.try_consume('for '):
             return self._parse_for()
         elif self.try_consume('endfor'):
-            return self._parse_end()
+            self._parse_end()
         elif self.try_consume('else'):
             self._parse_else()
+        elif self.try_consume('empty'):
+            self._parse_empty()
+        elif self.try_consume('comment'):
+            return self._parse_comment()
         else:
             raise TemplateError('unknown tag')
 
@@ -225,21 +251,26 @@ class Parser:
     def _parse_if(self):
         self._consume_whitespace()
         expression = self._read_to("%}", "if").strip()
-        true_group, false_group = self._parse_else_group('endif')
+        true_group, false_group = self._parse_else_or_empty_group('endif')
         return IfNode(expression, true_group, false_group)
 
     def _parse_end(self):
-        self._consume_whitespace()
-        if not self.try_consume('%}'):
-            raise TemplateError('expected \'%}\' at end of tag')
+        self._end_tag('end')
         raise EndGroupException('unexpected end tag')
         # its not really always unexpected
 
     def _parse_else(self):
+        self._end_tag('else')
+        raise ElseException('unexpected else tag')
+
+    def _parse_empty(self):
+        self._end_tag('empty')
+        raise EmptyException('unexpected empty tag')
+
+    def _end_tag(self, name):
         self._consume_whitespace()
         if not self.try_consume('%}'):
-            raise TemplateError('expected \'%}\' at end of else tag')
-        raise ElseException('unexpected else tag')
+            raise TemplateError('expected \'%}\' at end of {} tag'.format(name))
 
     def _parse_for(self):
         self._consume_whitespace()
@@ -248,8 +279,8 @@ class Parser:
         if not self.try_consume('in '):
             raise TemplateError('expected\'in \' after {}'.format(item))
         sequence = self._read_to("%}", "for").strip()
-        group = self._parse_group('endfor')
-        return ForNode(item, sequence, group)
+        for_group, empty_group = self._parse_else_or_empty_group('endfor')
+        return ForNode(item, sequence, for_group, empty_group)
 
     def _parse_text(self):
         content = ""
@@ -260,6 +291,20 @@ class Parser:
 
     def _parse_python(self):
         return PythonNode(self._read_to("}}", "python"))
+
+    def _parse_safe(self):
+        return SafeNode(self._read_to("%}", "safe"))
+
+    def _parse_comment(self):
+        self._end_tag('comment')
+        while True:
+            self._read_to('{%', 'comment')
+            self._consume_whitespace()
+            if self.try_consume('endcomment'):
+                self._consume_whitespace()
+                if self.try_consume('%}'):
+                    break
+        return CommentNode()
 
     def _read_to(self, token, name="tag"):
         result = ""
@@ -280,4 +325,8 @@ class EndGroupException(TemplateError):
 
 
 class ElseException(TemplateError):
+    pass
+
+
+class EmptyException(TemplateError):
     pass

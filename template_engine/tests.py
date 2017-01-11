@@ -95,4 +95,43 @@ assert_renders('{% if value %}this{% else %}that{% endif %} yay', {'value': Fals
 
 assert_renders('abc {% if value %}this{% else %}that{% endif %} yay', {'value': True}, 'abc this yay')
 
-assert throws('abc {% if value %}this{% else %} {%else%} that{% endif %} yay', {'value': True})
+assert throws('abc {% if value %}this{% else %} {%else%} that{% endif %} yay', {'value': True}),\
+    'else outside of if should fail'
+
+assert_renders(
+    'this {% for a in b %} {{a}} {% empty %} that {% endfor %} and the other.',
+    {"b": []},
+    'this  that  and the other.'
+)
+
+assert throws('not in a for --> {% empty %}', {}), 'empty tag outside of for should fail'
+
+assert_renders(
+    'this {% for a in b %} {{a}} {% empty %} that {% endfor %} and the other.',
+    {"b": [1, 2]},
+    'this  1  2  and the other.'
+)
+
+assert_renders('{% safe value %}', {'value': '<html>'}, "<html>")
+
+assert_renders('{%        safe value%}', {'value': '<html>'}, "<html>")
+
+assert_renders(
+    '{%safe value %}',
+    {'value': template_engine.GroupNode},
+    '<class \'template_engine.GroupNode\'>'
+)
+
+assert throws('{%safevalue%}', {'value': '<html>'}), 'no space after safe should fail'
+
+assert_renders('{% comment %}asfgasdfasdfa{% endcomment %}', {}, '')
+
+assert_renders('{%comment%}{% asdfasdfasdf %}{%endcomment         %}', {}, '')
+
+assert_renders('start{%comment%}{% asdfasdfasdf %}{%endcomment%}end', {}, 'startend')
+
+assert_renders('{%comment%}{% if True %}chicken{%endif%}{%endcomment%}', {}, '')
+
+assert throws('{%comment%}{% if True %}chicken{%endcomment%}{%endif%}', {}), 'tags should be invalid inside comment'
+
+assert throws('{% if True %}{%comment%}chicken{%endif%}{%endcomment%}', {}), 'tags should be invalid inside comment'
