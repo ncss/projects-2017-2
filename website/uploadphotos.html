@@ -1,13 +1,10 @@
-<DOCTYPE html>
-    <html>
-        <title>Upload Photo</title>
-    <body>
-    <form action="/save_file" method=post" enctype="multipart/form-data">
-        <input type="file" name="attachment">
-    </form>
-    <p>Display Chosen File name</p>
-    <textarea>Caption & Request</textarea>
-    <input type="submit" value="upload">
-    </body>
-    <footer></footer>
-    </html>
+{% include 'header.html' %}
+
+<form action="/save_file" method=post" enctype="multipart/form-data">
+    <input type="file" name="attachment">
+</form>
+<p>Display Chosen File name</p>
+<textarea>Caption & Request</textarea>
+<input type="submit" value="upload">
+
+{% include 'footer.html' %}
