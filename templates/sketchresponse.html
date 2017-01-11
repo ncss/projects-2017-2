@@ -9,13 +9,15 @@
 
 <div id="slideshow">
     <h1>Slide Show</h1>
-    <img src="sketch1.jpg" alt="Response to photograph" class="smallsketch">
-    <img src="sketch2.jpg" alt="Response to photograph" class="smallsketch">
-    <img src="sketch2.jpg" alt="Response to photograph" class="smallsketch">
-    <img src="sketch2.jpg" alt="Response to photograph" class="smallsketch">
-    <img src="sketch2.jpg" alt="Response to photograph" class="smallsketch">
-    <img src="sketch2.jpg" alt="Response to photograph" class="smallsketch">
+    {% for image in images %}
+        <img src="/static/images/{{image}}" alt="Response to photograph" class="smallsketch">
+        <!--<img src="sketch2.jpg" alt="Response to photograph" class="smallsketch">
+        <img src="sketch2.jpg" alt="Response to photograph" class="smallsketch">
+        <img src="sketch2.jpg" alt="Response to photograph" class="smallsketch">
+        <img src="sketch2.jpg" alt="Response to photograph" class="smallsketch">
+        <img src="sketch2.jpg" alt="Response to photograph" class="smallsketch">-->
+    {% endfor %}
 </div>
 
-<a href="/photo}">Photos</a>
-{% include 'templates/footer.html' %}
+<a href="/photo/view}">Photos</a>
+{% include 'templates/footer.shtml' %}
