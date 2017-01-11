@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Euphoria+Script|Open+Sans');
 @import url("http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css");
-@import url('https://fonts.googleapis.com/css?family=Patrick+Hand');
+@import url('https://fonts.googleapis.com/css?family=Roboto+Condensed');
 
 html{
     height: 100%;
@@ -11,7 +11,7 @@ body {
     flex-flow: column;
     width: 100%;
     height: 100%;
-    font-family: 'Patrick Hand', cursive;
+    font-family: 'Roboto Condensed', sans-serif;
     font-size: 18px;
 }
 #title {
@@ -23,12 +23,16 @@ body {
 #header{
     background-color: rgb(251, 140, 0);
     color: #FFF3E0;
-    width: 100%;
     height: 100px;
     justify-content: space-between;
     padding-left: 10px;
     padding-top: 5px;
     flex: 0 1 auto;
+}
+
+#title a,#title a:visited,#title a:hover {
+    color:white;
+
 }
 #main {
     flex: 1 1 auto;
@@ -40,13 +44,12 @@ body {
     background-color: rgb(255, 224, 178);
     width: 175px;
     padding: 10px;
-    font-family: 'Patrick Hand', cursive;
+    font-family: 'Roboto Condensed', sans-serif;
     font-size: 20px;
 }
 .row {
     display: flex;
     flex-direction: row;
-    width: 100%;
 }
 
 
@@ -74,7 +77,7 @@ a {
     background-color: #FFF3E0;
     font-size: 22px;
     text-align: center;
-    font-family: 'Patrick Hand', cursive;
+    font-family: 'Roboto Condensed', sans-serif;
     padding: 10px;
     border-radius: 20px;
     margin: 5px;
@@ -91,9 +94,14 @@ a {
 .uploadbutton > a {
     color: white;
 }
-#nav ul {
 
+#nav ul p {
+    font-weight: bold;
+}
+
+#nav ul {
     list-style-type: none;
+    line-height: 1.2;
 }
 #nav ul a {
     color: black;
@@ -105,15 +113,24 @@ a {
 
 #popular a, #recent a {
     color: black;
+    font-size: 20px;
+    font-weight: bold;
+    margin: 5px;
+    line-height: 1.5;
 }
 
-ul > li > a {
+#nav ul > li > a {
     margin: 5px;
     color: black;
 }
 
 #nav a:hover {
     color: rgb(251, 140, 0);
+}
+
+
+#nav .uploadbutton > a:hover {
+    color: black;
 }
 
 main {
@@ -123,8 +140,10 @@ main {
 
 #headermenu {
     margin-left: 10px;
-    margin-right: 5px;
-    padding-right: 5px;
+    margin-right: 10px;
+    padding-right: 50px;
+    vertical-align: middle;
+    line-height: 100px;
 }
 
 #headermenu a {
@@ -151,7 +170,7 @@ input[type="submit"]{
     margin: 5px;
     border-style: none;
     color: white;
-    font-family: 'Patrick Hand', cursive;
+    font-family: 'Roboto Condensed', sans-serif;
     font-size: 18px;
 }
 
@@ -163,7 +182,7 @@ input[type="submit"]{
     margin: 15px;
     border-style: none;
     color: white;
-    font-size: 14px;
+    font-size: 18px;
 }
 
 #ormessage {
@@ -172,9 +191,45 @@ input[type="submit"]{
 
 #categories {
     color: rgb(251, 140, 0);
-    font-size: 25px;
+    font-size: 26px;
     text-align: center;
+    padding: 5px;
 }
 #maincontent h1 {
     font-size: 32px;
+}
+
+#login,#register {
+    margin-top: 30px;
+}
+
+#message {
+    margin-top: 30px;
+    color: red;
+}
+
+#slideshow {
+    margin-left:auto;
+    margin-right:auto;
+    text-align: center;
+}
+
+.smallsketch {
+    height: 100px;
+    margin: 5px;
+}
+
+#enlargephoto {
+    margin: 5px;
+    text-align: center;
+}
+
+.bigphoto {
+    margin: 5px;
+    height: 300px;
+}
+
+#sublist {
+    list-style: none;
+    margin-left: 15px;
 }
