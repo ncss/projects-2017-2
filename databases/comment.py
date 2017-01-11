@@ -4,7 +4,6 @@ from databases.profiles import Profiles
 class Comment(BasicInfo):
     def __init__(self, pkid, user, *args):
         super().__init__(pkid, user, *args)
-        self.reply_to = args[0]
 
     @classmethod
     def create(cls, sql, user_id, reply_to, contents):

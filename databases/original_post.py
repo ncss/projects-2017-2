@@ -6,7 +6,7 @@ class OriginalPost(BasicInfo):
         super().__init__(pkid, user, *args)
 
     def __repr__(self):
-        return "OriginalPost("+",".join([self.id,self.user,None,self.contents,self.date])+")"
+        return "OriginalPost("+",".join(map(str,[self.id,self.user,self.reply_to,self.contents,self.date]))+")"
 
     @staticmethod
     def get_posts(sql,skip):
@@ -36,5 +36,5 @@ class OriginalPost(BasicInfo):
         SELECT date
         FROM comments
         WHERE id=?''',(pkid,)).fetchone()[0]
-
+        print(pkid,user_id,None,contents,date)
         return cls(pkid,user_id,None,contents,date)

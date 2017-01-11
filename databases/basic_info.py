@@ -4,6 +4,7 @@ class BasicInfo:
     def __init__(self, pkid, user, *args):
         self.id = pkid
         self.user = user
+        self.reply_to = args[0]
         self.contents = args[1]
         self.date=args[2]
 
