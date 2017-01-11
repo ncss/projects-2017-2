@@ -107,9 +107,9 @@ def category_post_selection(response):
 def see_photo_and_response(response,post_id):
     image = OriginalPost.from_id(db, post_id)
     path = '/'+OriginalPost.from_id(db,post_id).get_image_path()
-    print(image.user.user)
-    template = render_file('templates/sketchresponse.html', {'image_url':path,'caption':image.contents,'login' : get_loggedin(response),'image_owner':image.user.user, 'post_id':post_id})
+    responses = [ (x.get_image_path(), x.contents) for x in OriginalPost.from_id(db,post_id).get_replies(db)]
 
+    template = render_file('templates/sketchresponse.html', {'image_url':path,'caption':image.contents,'login' : get_loggedin(response),'image_owner':image.user.user, 'post_id':post_id, 'responses':responses})
     response.write(template)
 
 

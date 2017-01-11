@@ -50,9 +50,3 @@ class OriginalPost(BasicInfo):
         date = sql.fetchone()[0]
         # print(Profiles.from_id(sql,user_id),pkid,user_id,None,contents,date)
         return cls(Profiles.from_id(sql,user_id),pkid,user_id,None,contents,date)
-
-    def get_image_path(self):
-        for file in os.listdir('static/images/'):
-            ext = re.match(str(self.id)+'(\..*)',file)
-            if ext:
-                return 'static/images/'+str(self.id)+ext.group(1)

@@ -1,3 +1,7 @@
+import os
+
+import re
+
 from databases.profiles import Profiles
 
 class BasicInfo:
@@ -18,4 +22,10 @@ class BasicInfo:
         p = Profiles.from_id(sql,x[1])
         return cls(p, *x)
 
+
+    def get_image_path(self):
+        for file in os.listdir('static/images/'):
+            ext = re.match(str(self.id)+'(\..*)',file)
+            if ext:
+                return 'static/images/'+str(self.id)+ext.group(1)
 #print(BasicInfo.get(some database object, 1).contents)
