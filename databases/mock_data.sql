@@ -10,7 +10,7 @@ INSERT INTO profiles VALUES (747025, "ksgiwfw", "weift823r2", "f23rb82bf_@gmail.
 INSERT INTO profiles VALUES ( 20520, "Becky", "idIfg34rer", "BeckyWilda@coles.com");
 
 
---(id, user_id, reply_to, contents, date)
+--(id, user_id, reply_id, contents, date)
 INSERT INTO comments VALUES (1, 989898, NULL, "I can do better.", "2017-01-01 00:00:26");
 INSERT INTO comments VALUES (2, 452246, 4, "Me like", "2017-01-01 00:01:50");
 INSERT INTO comments VALUES (3, 987654, NULL, "I believe your choice of colours is incorrect. Add more warmth so you can add more life to it.", "2017-01-01 05:42:42");
