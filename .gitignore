@@ -98,4 +98,4 @@ data.db
 .idea
 
 # Uploaded images
- static/images/
+static/images/*
