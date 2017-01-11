@@ -2,9 +2,10 @@
 <div id="enlargephoto">
     <div>
         <img src="{{ image_url }}" alt="Photograph" class="bigphoto">
-        <h2>{{ caption }}</h2>
-        <p>by {{ image_owner }}</p>
+        <br><h2>{{ caption }}</h2>
+        <p>By {{ image_owner }}</p>
     </div>
+    <br><h1>Responses</h1>
 </div>
 
 {% if login %}
@@ -14,13 +15,12 @@
 {% endif %}
 
 <div>
-    <h1>Responses</h1>
     <div id="responses">
         {% for response in responses %}
         <div class="response-img">
             <img src="/{{response[0]}}" width="300em"/>
             <h3>{{ response[1] }}</h3>
-            <p>by {{ response[2].user }}</p>
+            <p>By {{ response[2].user }}</p>
         </div>
         {% endfor %}
     </div>
