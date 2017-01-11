@@ -7,12 +7,14 @@ CREATE TABLE profiles (
 	email TEXT
 );
 
+/*
 CREATE TABLE images (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	user_id INT,
 	date DATETIME DEFAULT (DATETIME('NOW')),
 	FOREIGN KEY(user_id) REFERENCES profiles(id)
 );
+*/
 
 CREATE TABLE comments (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,

@@ -7,7 +7,7 @@ class OriginalPost(BasicInfo):
         self.image_id = args[3]
 
     @staticmethod
-    def GetPosts(sql,skip):
+    def get_posts(sql,skip):
         sql.execute('''
         SELECT *
         FROM comments
@@ -20,4 +20,4 @@ class OriginalPost(BasicInfo):
             original_post.append(OriginalPost(p,*a))
         return original_post
 
-#OriginalPost.GetPosts(1)
+#OriginalPost.get_posts(database object, 1)
