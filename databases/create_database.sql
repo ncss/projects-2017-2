@@ -19,13 +19,13 @@ CREATE TABLE images (
 CREATE TABLE comments (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	user_id INT,
-	reply_id INT,
-	image_id INT DEFAULT NULL,
+	reply_id INT DEFAULT NULL,
+	--image_id INT DEFAULT NULL,
 	contents TEXT,
 	date DATETIME DEFAULT (DATETIME('NOW')),
 	FOREIGN KEY(user_id) REFERENCES profiles(id),
-	FOREIGN KEY(reply_id) REFERENCES comments(id),
-	FOREIGN KEY(image_id) REFERENCES images(id)
+	FOREIGN KEY(reply_id) REFERENCES comments(id)
+	--FOREIGN KEY(image_id) REFERENCES images(id)
 );
 
 CREATE TABLE categories (
@@ -38,7 +38,7 @@ CREATE TABLE imagecategories (
 	category_id INT,
 	image_id INT,
 	FOREIGN KEY(category_id) REFERENCES categories(id),
-	FOREIGN KEY(image_id) REFERENCES images(id)
+	FOREIGN KEY(image_id) REFERENCES comments(id) -- image ids are tied to comment ids
 );
 
 CREATE TABLE votes (
