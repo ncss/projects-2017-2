@@ -1,15 +1,19 @@
-<form method="post">
-    Enter your username:
-    <input type="text" name="username"/>
-    Enter Your Password:
-    <input type="password" name="password"/>
-    Enter Email:
-    <input type="email" name="email"/>
-    <input type="submit"/>
-
+{% include 'templates/header.html' %}
+<h1>
+    Create Account
+</h1>
+<form  method="post">
+  Username:<br>
+    <input type="text" name=" Enter username"/><br>
+  Password:<br>
+    <input type="password" name=" Enter password"/><br>
+  Confirm Password: <br>
+    <input type="password" name= "Confirm password"/><br>
+    <input type="submit" value="Go"/>
 </form>
 
-Already have an account?
 <a href="/user/login">Login</a>
 
 {{message}}
+
+{% include 'templates/footer.html' %}
