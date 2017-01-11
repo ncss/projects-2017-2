@@ -1,21 +1,21 @@
 BEGIN TRANSACTION;
 
 CREATE TABLE profiles (
-	id INT PRIMARY KEY,
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	username TEXT UNIQUE,
 	password TEXT,
 	email TEXT
 );
 
 CREATE TABLE images (
-	id INT PRIMARY KEY,
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	user_id INT,
 	date DATETIME DEFAULT (DATETIME('NOW')),
 	FOREIGN KEY(user_id) REFERENCES profiles(id)
 );
 
 CREATE TABLE comments (
-	id INT PRIMARY KEY,
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	user_id INT,
 	reply_id INT,
 	image_id INT DEFAULT NULL,
@@ -27,12 +27,12 @@ CREATE TABLE comments (
 );
 
 CREATE TABLE categories (
-	id INT PRIMARY KEY,
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	name TEXT -- category name
 );
 
 CREATE TABLE imagecategories (
-	id INT PRIMARY KEY,
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	category_id INT,
 	image_id INT,
 	FOREIGN KEY(category_id) REFERENCES categories(id),
@@ -40,7 +40,7 @@ CREATE TABLE imagecategories (
 );
 
 CREATE TABLE votes (
-	id INT PRIMARY KEY,
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	user_id INT,
 	comment_id INT,
 	is_upvote INT, -- SQLite does not technically have a bool

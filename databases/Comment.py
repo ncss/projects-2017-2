@@ -18,4 +18,5 @@ class Comment(BasicInfo):
         return cls(p, comment_id, user_id, reply_to, image_id, contents, date)
 
 
-#print(Comment.CreateComment('18', '20520', '4', 'NULL', 'Hello', '12/1/14').contents)
+sql.open()
+print(Comment.CreateComment('18', '20520', '4', 'NULL', 'Hello', '12/1/14').contents)
