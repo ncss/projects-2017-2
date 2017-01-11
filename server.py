@@ -4,8 +4,11 @@ from databases import OriginalPost
 from tornado.ncss import Server
 from template_engine.__init__ import render_file
 import re
+import os
 
 db = Database('databases/data.db')
+if not os.path.isdir('static/images'):
+    os.mkdir('static/images')
 
 def get_loggedin(response):
     loggedin = response.get_secure_cookie('username')
@@ -13,8 +16,7 @@ def get_loggedin(response):
         return loggedin.decode('UTF8')
 
 def index(response):
-    path = [p.get_image_path() for p in OriginalPost.get_posts(db)]
-    #print(path)
+
     template = render_file('templates/index.html', {"images": [p.get_image_path() for p in OriginalPost.get_posts(db)], "cur_post": None, "login": get_loggedin(response)})
     response.write(template)
 

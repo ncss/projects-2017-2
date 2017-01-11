@@ -3,6 +3,8 @@
 <div id="image-wall">
     {% for cur_post in images %}
         <img src="{{ cur_post }}" class="wallphoto">
+    {% empty %}
+        <p>No images yet. You can upload one.</p>
     {% endfor %}
 </div>
 {% include 'templates/footer.html' %}
