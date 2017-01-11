@@ -90,7 +90,8 @@ a {
     margin: 5px;
     list-style-type: none;
 }
-ul > li {
+#nav ul a {
+    color: black;
 }
 
 ul > li > a {
