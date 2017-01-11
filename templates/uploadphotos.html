@@ -1,10 +1,10 @@
-{% include 'site_template/header.html' %}
+{% include 'templates/header.html' %}
 
 <form action="/save_file" method=post" enctype="multipart/form-data">
     <input type="file" name="attachment">
 </form>
 <p>Display Chosen File name</p>
 <textarea>Caption & Request</textarea>
-<input type="submit" value="upload">
+<input type="submit" value="Upload">
 
-{% include 'site_template/footer.html' %}
+{% include 'templates/footer.html' %}

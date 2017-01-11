@@ -78,6 +78,11 @@ def category_post_selection(response):
     template = render_file('templates/category.html', {'category': category})
     response.write(template)
 
+def upload_photo(response):
+    template = render_file('templates/uploadphotos.html', {})
+    response.write(template)
+
+
 
 server = Server()
 server.register("/", index)
@@ -85,4 +90,5 @@ server.register(r'/user/account/(\w+)', user_get_account)
 server.register('/user/login', user_get_login, post=user_post_login)
 server.register('/user/register', user_get_register, post=user_post_register)
 server.register("/category/selection", category_get_selection, post=category_post_selection)
+server.register("/photo/upload", upload_photo)
 server.run()
