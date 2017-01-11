@@ -105,3 +105,9 @@ assert_renders(
 )
 
 assert throws('not in a for --> {% empty %}', {}), 'empty tag outside of for should fail'
+
+assert_renders(
+    'this {% for a in b %} {{a}} {% empty %} that {% endfor %} and the other.',
+    {"b": [1, 2]},
+    'this  1  2  and the other.'
+)
