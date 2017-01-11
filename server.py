@@ -5,10 +5,10 @@ import re
 
 
 def index(response):
-    if response.get_field('name'):
-        template = render_file('templates/result.html', {'person': response.get_field('name')})
-    else:
-        template = render_file('templates/index.html', {})
+    loggedin = response.get_secure_cookie('username')
+    print(loggedin)
+    print("COOKIE")
+    template = render_file('templates/index.html', {})
     response.write(template)
 
 
@@ -18,10 +18,10 @@ def is_valid_username(username):
     else:
         return False
 
-
 def user_get_account(response, username):
     loggedin = response.get_secure_cookie('username')
     print(username, loggedin)
+    print("COOKIE")
     if username.encode('UTF8') == loggedin:
         template = render_file('templates/account.html', {'name': username})
         response.write(template)
