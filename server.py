@@ -138,7 +138,7 @@ def image_post_upload(response):
     content = response.get_field('content')
     username = response.get_secure_cookie('username')
     if not username:
-        template = render_file('templates/uploadphotos.html', {'message': 'You need to Log in first', 'login':username})
+        template = render_file('templates/uploadphotos.html', {'message': 'You need to Log in first', 'login':username, 'categories': CATEGORIES})
         response.write(template)
     else:
         username = username.decode()
@@ -158,7 +158,7 @@ def image_post_upload(response):
 
 def response_get_upload(response, post_id):
     username = response.get_secure_cookie('username')
-    template = render_file('templates/uploadphotos.html', {'message': '', 'login': username})
+    template = render_file('templates/uploadphotos.html', {'message': '', 'login': username, 'categories':CATEGORIES})
     response.write(template)
 
 
@@ -188,10 +188,10 @@ def display_category(response, category):
     if not category in CATEGORIES:
         return response.redirect('/')
     context = {
-        "images": [p.get_image_path() for p in OriginalPost.get_posts_with_category(db, category)],
+        "images": [(p.get_image_path(), p.id) for p in OriginalPost.get_posts_with_category(db, category)],
         "cur_post": None,
         "login": get_loggedin(response),
-        "category_name": category.title(),
+        "category": category.title(),
     }
     return response.write(render_file('templates/category.html', context))
 

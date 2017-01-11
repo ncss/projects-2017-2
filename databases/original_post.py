@@ -86,4 +86,4 @@ class OriginalPost(BasicInfo):
         for file in os.listdir('static/images/'):
             ext = re.match(str(self.id)+'(\..*)',file)
             if ext:
-                return '/static/images/'+str(self.id)+ext.group(1)
+                return 'static/images/'+str(self.id)+ext.group(1)
