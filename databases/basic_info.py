@@ -19,4 +19,3 @@ class BasicInfo:
         return cls(p, *x)
 
 #print(BasicInfo.get(some database object, 1).contents)
-

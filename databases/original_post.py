@@ -1,5 +1,6 @@
 from databases.basic_info import BasicInfo
 from databases.profiles import Profiles
+from databases.response import Response
 import os
 import re
 
@@ -24,6 +25,14 @@ class OriginalPost(BasicInfo):
             p = Profiles.from_id(sql,a[1])
             original_post.append(OriginalPost(p,*a))
         return original_post
+
+    def get_replies(self, sql):
+        sql.execute('''
+        SELECT *
+        FROM comments
+        WHERE reply_id=?''', (self.id,))
+
+        return [Response(Profiles.from_id(sql,x[1]),*x) for x in sql.fetchall()]
 
     @classmethod
     def create(cls,sql,user_id,contents):
