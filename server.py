@@ -95,7 +95,8 @@ def category_post_selection(response):
 
 
 def image_get_upload(response):
-    template = render_file('templates/mock_upload.html', {})
+    username = response.get_secure_cookie('username')
+    template = render_file('templates/uploadphotos.html', {'message': '', 'loged_in':username})
     response.write(template)
 
 
@@ -104,15 +105,18 @@ def image_post_upload(response):
     file_extension = str(f[0]).split('.')[-1]
     image = f[2]  # Bytes
     content = response.get_field('content')
-    username = response.get_secure_cookie('username').decode()
+    username = response.get_secure_cookie('username')
     if not username:
-        response.write('Not Logged ')
+        template = render_file('templates/uploadphotos.html', {'message': 'You need to Log in first6'})
+        response.write(template)
     else:
+        username = username.decode()
         post = OriginalPost.create(db, Profiles.from_user(db, username).id, content)
         print(post)
         path = "static/" + str(post.id) + "." + file_extension
         with open(path, "wb") as file:
             file.write(image)
+        response.redirect("/")
 
 
 server = Server()
