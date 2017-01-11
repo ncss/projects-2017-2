@@ -78,3 +78,5 @@ assert throws("{% include'helloworld.txt' %}", {}), 'no space after include shou
 assert_renders('{% for a in b%}s:{{a}}:e{%endfor%}', {'b': [1,2,3]}, 's:1:es:2:es:3:e')
 
 assert throws('{% fora in b%}s:{{a}}:e{%endfor%}', {'b': [1,2,3]}), 'no space after for should fail'
+
+assert_renders('{% for a in b%}{{a}}{%endfor%}', {'b': (c for c in 'abc')}, 'abc')
