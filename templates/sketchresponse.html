@@ -13,17 +13,16 @@
 </a>
 {% endif %}
 
-<div>  
-    <h1>Responses</h1>  
+<div>
+    <h1>Responses</h1>
     <div id="responses">
-        {% for response in responses %}  
+        {% for response in responses %}
         <div class="response-img">
-            <img src = '/{{response[0]}}' width="300em"/> 
-
+            <img src="/{{response[0]}}" width="300em"/>
             <h3>{{ response[1] }}</h3>
             <p>by {{ response[2].user }}</p>
         </div>
-        {% endfor %}  
+        {% endfor %}
     </div>
 </div>
 

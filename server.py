@@ -162,7 +162,7 @@ def response_post_upload(response, post_id):
 
 server = Server()
 server.register("/", index)
-server.register(r'/user/account/', user_get_account)
+server.register(r'/user/account', user_get_account)
 server.register('/user/login', user_get_login, post=user_post_login)
 server.register('/user/register', user_get_register, post=user_post_register)
 server.register('/user/logout' , user_get_logout)
