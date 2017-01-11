@@ -13,15 +13,22 @@ def throws(template, context, message=None):
 
 
 def assert_renders(template, context, expected):
-    parser = template_engine.Parser(template)
-    node = parser.parse()
-    result = node.eval(context)
-    if result != expected:
-        print('result:', result)
+    try:
+        parser = template_engine.Parser(template)
+        node = parser.parse()
+        result = node.eval(context)
+        if result != expected:
+            print('template:', template)
+            print('result:', result)
+            print('expected:', expected)
+            print('context:', context)
+            print(repr(node))
+            print()
+    except Exception:
+        print('template:', template)
         print('expected:', expected)
         print('context:', context)
-        print(repr(node))
-        print()
+        raise
 
 assert_renders("foobar", {}, "foobar")
 
@@ -63,3 +70,11 @@ assert_renders('{% if value %}this{% endif %} and/or this', {'value': None}, ' a
 assert throws('{% if value %}failure', {}), 'if with no endif should fail'
 
 assert throws('failure{% endif %}', {}), 'endif without matching if should fail'
+
+assert throws('{% ifvalue %}this{% endif %} and/or this', {'value': None}),'no space after if should fail'
+
+assert throws("{% include'helloworld.txt' %}", {}), 'no space after include should fail'
+
+assert_renders('{% for a in b%}s:{{a}}:e{%endfor%}', {'b': [1,2,3]}, 's:1:es:2:es:3:e')
+
+assert throws('{% fora in b%}s:{{a}}:e{%endfor%}', {'b': [1,2,3]}), 'no space after for should fail'

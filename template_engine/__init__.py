@@ -88,6 +88,11 @@ class IfNode:
             return ""
 
 
+class ForNode:
+    def __init(self):
+        pass
+
+
 class Parser:
     def __init__(self, tokens):
         self._tokens = tokens
@@ -148,12 +153,14 @@ class Parser:
 
     def _parse_tag(self):
         self._consume_whitespace()
-        if self.try_consume('include'):
+        if self.try_consume('include '):
             return self._parse_include()
-        elif self.try_consume('if'):
+        elif self.try_consume('if '):
             return self._parse_if()
-        elif self.try_consume('endif'):
+        elif self.try_consume('endif '):
             self._parse_end()
+        elif self.try_consume('for '):
+            return self._parse_for()
         else:
             raise TemplateError('unknown tag')
 
@@ -179,6 +186,14 @@ class Parser:
             raise TemplateError('expected \'%}\' at end of endif tag')
         raise EndGroupException('unexpected endif tag')
         # its not really always unexpected
+
+    def _parse_for(self):
+        self._consume_whitespace()
+        iterator = self._read_to(' ', 'for')
+        if not self.try_consume('in '):
+            raise TemplateError('expected\'in \' after {}'.format(iterator))
+        # left off here
+
 
     def _parse_text(self):
         content = ""
