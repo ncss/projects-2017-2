@@ -61,6 +61,18 @@ class OriginalPost(BasicInfo):
         # print(Profiles.from_id(sql,user_id),pkid,user_id,None,contents,date)
         return cls(Profiles.from_id(sql,user_id),pkid,user_id,None,contents,date)
 
+    @staticmethod
+    def make_category_links(sql, comment_id, categories):
+        for category in categories:
+            sql.execute(
+                '''
+                    INSERT INTO categorylink
+                    (category_name, comment_id)
+                    VALUES (?, ?)
+                ''',
+                (category, comment_id)
+            )
+
     def get_image_path(self):
         for file in os.listdir('static/images/'):
             ext = re.match(str(self.id)+'(\..*)',file)

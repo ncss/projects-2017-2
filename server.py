@@ -118,7 +118,12 @@ def see_photo_and_response(response):
 
 def image_get_upload(response):
     username = response.get_secure_cookie('username')
-    template = render_file('templates/uploadphotos.html', {'message': '', 'login':username})
+    context = {
+        'message': '',
+        'login':username,
+        'categories': CATEGORIES,
+    }
+    template = render_file('templates/uploadphotos.html', context)
     response.write(template)
 
 def image_post_upload(response):

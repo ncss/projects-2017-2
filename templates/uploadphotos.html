@@ -1,19 +1,26 @@
 {% include 'templates/header.html' %}
 
 <form method="POST" enctype="multipart/form-data">
+    <h1>Upload Image</h1>
+    <br>
     {% if login %}
         <input type="file" name="upload" >
         <br/>
-        <textarea name ="content">Request</textarea>
+        <br>
+        <p>Caption your photo</p>
+        <textarea name ="content">Caption and Request</textarea>
+        <br><br>
+        {% for category in categories %}
+            <input type="checkbox" name="{{category}}">{{category}}
+            <br><br>
+        {% endfor %}
+        <br>
         <input type="submit" value="upload">
     {% else %}
-         <h3>You need to Log in First</h3>
+         <h3>You need to log in before uploading</h3>
     {% endif %}
 
 </form><br>
-<p>Caption your photo</p>
-
-<textarea>Caption & Request</textarea>
 <br><br>
 
 {% include 'templates/footer.html' %}
