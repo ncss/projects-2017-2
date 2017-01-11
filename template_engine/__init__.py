@@ -74,18 +74,48 @@ class IncludeNode:
 
 
 class IfNode:
-    def __init__(self, expression, group):
+    def __init__(self, expression, true_group, false_group):
         self.expression = expression
-        self.group = group
+        self.true_group = true_group
+        self.false_group = false_group
 
     def __repr__(self):
-        return 'IfNode({!r}, {!r})'.format(self.expression, self.group)
+        return 'IfNode({!r}, {!r})'.format(self.expression, self.true_group, self.false_group)
 
     def eval(self, context):
         if _evaluate_python(self.expression, context):
-            return self.group.eval(context)
+            return self.true_group.eval(context)
         else:
-            return ""
+            if self.false_group is not None:
+                return self.false_group.eval(context)
+            else:
+                return ''
+
+
+class ForNode:
+    def __init__(self, item, sequence, group):
+        self.item = item
+        self.sequence = sequence
+        self.group = group
+
+    def __repr__(self):
+        return 'ForNode({!r}, {!r}, {!r})'.format(self.item, self.sequence, self.group)
+
+    def eval(self, context):
+        content = ""
+        try:
+            iterable = context[self.sequence]
+        except KeyError:
+            raise TemplateError('could not parse for tag, iterable {} not in context'.format(self.sequence))
+        try:
+            iter(iterable)
+        except TypeError:
+            raise TemplateError('{} is not iterable'.format(self.sequence))
+        for element in iterable:
+            current_context = context.copy()
+            current_context[self.item] = element
+            content += self.group.eval(current_context)
+        return content
 
 
 class Parser:
@@ -138,6 +168,25 @@ class Parser:
                 raise TemplateError('expected {}'.format(terminal_tag))
         return GroupNode(nodes)
 
+    def _parse_else_group(self, terminal_tag=None):
+        """
+        Returns two groups, one for the true case, one for the false case.
+        Second group may be None if no else tag.
+        """
+        nodes = []
+        try:
+            while self.peek() is not None:
+                nodes.append(self._parse_node())
+        except EndGroupException:
+            true_group = GroupNode(nodes)
+            false_group = None
+        except ElseException:
+            true_group = GroupNode(nodes)
+            false_group = self._parse_group(terminal_tag)
+        else:
+            raise TemplateError('expected {}'.format(terminal_tag))
+        return true_group, false_group
+
     def _parse_node(self):
         if self.try_consume("{{"):
             return self._parse_python()
@@ -148,12 +197,18 @@ class Parser:
 
     def _parse_tag(self):
         self._consume_whitespace()
-        if self.try_consume('include'):
+        if self.try_consume('include '):
             return self._parse_include()
-        elif self.try_consume('if'):
+        elif self.try_consume('if '):
             return self._parse_if()
-        elif self.try_consume('endif'):
+        elif self.try_consume('endif '):
             self._parse_end()
+        elif self.try_consume('for '):
+            return self._parse_for()
+        elif self.try_consume('endfor'):
+            return self._parse_end()
+        elif self.try_consume('else'):
+            self._parse_else()
         else:
             raise TemplateError('unknown tag')
 
@@ -170,15 +225,31 @@ class Parser:
     def _parse_if(self):
         self._consume_whitespace()
         expression = self._read_to("%}", "if").strip()
-        group = self._parse_group('endif')
-        return IfNode(expression, group)
+        true_group, false_group = self._parse_else_group('endif')
+        return IfNode(expression, true_group, false_group)
 
     def _parse_end(self):
         self._consume_whitespace()
         if not self.try_consume('%}'):
-            raise TemplateError('expected \'%}\' at end of endif tag')
-        raise EndGroupException('unexpected endif tag')
+            raise TemplateError('expected \'%}\' at end of tag')
+        raise EndGroupException('unexpected end tag')
         # its not really always unexpected
+
+    def _parse_else(self):
+        self._consume_whitespace()
+        if not self.try_consume('%}'):
+            raise TemplateError('expected \'%}\' at end of else tag')
+        raise ElseException('unexpected else tag')
+
+    def _parse_for(self):
+        self._consume_whitespace()
+        item = self._read_to(' ', 'for')
+        self._consume_whitespace()
+        if not self.try_consume('in '):
+            raise TemplateError('expected\'in \' after {}'.format(item))
+        sequence = self._read_to("%}", "for").strip()
+        group = self._parse_group('endfor')
+        return ForNode(item, sequence, group)
 
     def _parse_text(self):
         content = ""
@@ -199,8 +270,14 @@ class Parser:
             self.next()
         return result
 
+
 class TemplateError(Exception):
     pass
 
+
 class EndGroupException(TemplateError):
+    pass
+
+
+class ElseException(TemplateError):
     pass
