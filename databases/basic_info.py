@@ -1,4 +1,4 @@
-from databases.Profiles import Profiles
+from databases.profiles import Profiles
 
 class BasicInfo:
     def __init__(self, user, *args):

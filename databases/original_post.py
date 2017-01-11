@@ -1,5 +1,5 @@
-from databases.BasicInfo import BasicInfo
-from databases.Profiles import Profiles
+from databases.basic_info import BasicInfo
+from databases.profiles import Profiles
 from databases.db import db
 
 sql = db()

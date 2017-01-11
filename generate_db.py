@@ -1,5 +1,5 @@
 import sqlite3, os
-from databases.Profiles import Profiles
+from databases.profiles import Profiles
 
 # Ensure database does not exist already
 if os.path.exists('databases/data.db'):
