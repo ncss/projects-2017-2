@@ -1,20 +1,23 @@
 from databases.profiles import Profiles
 
 class BasicInfo:
-    def __init__(self, user, *args):
+    def __init__(self, pkid, user, *args):
+        self.id = pkid
         self.user = user
-        self.contents = args[4]
-        self.date = args[5]
+        self.contents = args[1]
+        self.date=args[2]
+
+
 
     @classmethod
-    def get(cls, sql, id):
+    def from_id(cls, sql, id):
         sql.execute('''
         SELECT *
         FROM comments WHERE id=?
         ''', (id,))
-        id = sql.fetchone()
-        p = Profiles.from_id(id[1])
-        return cls(p, *id)
+        x = sql.fetchone()
+        p = Profiles.from_id(sql,x[1])
+        return cls(id, p, *x)
 
-#print(BasicInfo.get(1).contents)
+#print(BasicInfo.get(some database object, 1).contents)
 

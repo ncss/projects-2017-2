@@ -19,8 +19,8 @@ CREATE TABLE images (
 CREATE TABLE comments (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	user_id INT,
-	reply_id INT,
-	image_id INT DEFAULT NULL,
+	reply_id INT DEFAULT NULL,
+	--image_id INT DEFAULT NULL,
 	contents TEXT,
 	date DATETIME DEFAULT (DATETIME('NOW')),
 	FOREIGN KEY(user_id) REFERENCES profiles(id),
