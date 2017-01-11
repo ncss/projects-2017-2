@@ -1,8 +1,10 @@
-from databases.Profiles import Profiles
+from databases import Profiles
+from databases import Database
 from tornado.ncss import Server
 from template_engine.__init__ import render_file
 import re
 
+db = Database('databases/data.db')
 
 def index(response):
     if response.get_field('name'):
@@ -35,7 +37,7 @@ def user_post_login(response):
 
     if is_valid_username(username) and password.strip() != '':
         try:
-            Profiles.login(username, password)
+            Profiles.login(db, username, password)
             response.redirect('/user/account/{}'.format(username))
         except ValueError as error:
             print(error)
@@ -58,7 +60,7 @@ def user_post_register(response):
 
     if is_valid_username(username) and password.strip() != '':
         try:
-            Profiles.register(username, password, email)
+            Profiles.register(db, username, password, email)
             response.write(username + ' registered!')
         except ValueError as error:
             template = render_file('templates/register.html', {'message': error})
