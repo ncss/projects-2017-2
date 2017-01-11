@@ -16,7 +16,8 @@
     {% for response in responses %}  
     <img src = '/{{response[0]}}' width="300em"/> 
 
-    <p>{{ response[1] }}</p>
+    <h3>{{ response[1] }}</h3>
+    <p>@ {{ response[2].user }}</p>
     <br>
     {% endfor %}  
 </div>
