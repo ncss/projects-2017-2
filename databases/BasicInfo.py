@@ -1,10 +1,9 @@
 from databases.Profiles import Profiles
-import databases.db
-import sqlite3
+from databases.db import db
 
-sql = databases.db.db()
+sql = db()
 
-class BasicInfo():
+class BasicInfo:
     def __init__(self, user, *args):
         self.user = user
         self.contents = args[4]
