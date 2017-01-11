@@ -87,8 +87,8 @@ a {
     margin: 5px;
 }
 
-.headerbutton > a:hover {
-    font-size: 100px;
+.headerbutton:hover {
+    color: rgb(251, 140, 0) !important;
 }
 
 .uploadbutton {
@@ -237,4 +237,8 @@ input[type="submit"]{
 .sublist {
     list-style: none;
     margin-left: 15px;
+}
+
+.fa-pencil {
+    font-size: 80px !important;
 }
