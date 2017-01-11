@@ -9,7 +9,6 @@ def render_file(filename, context):
 def render(template, context):
     parser = Parser(template)
     node = parser.parse()
-    #print(repr(node))
     return node.eval(context)
 
 def _evaluate_python(content, context):
@@ -107,15 +106,22 @@ class IfNode:
                 return ''
 
 
+def test_iterability(object_):
+    try:
+        iter(object_)
+    except TypeError:
+        raise TemplateError('{} is not iterable'.format(str(object_)))
+
+
 class ForNode:
-    def __init__(self, item, sequence, for_group, empty_group):
-        self.item = item
+    def __init__(self, item_tuple, sequence, for_group, empty_group):
+        self.item_tuple = item_tuple
         self.sequence = sequence
         self.for_group = for_group
         self.empty_group = empty_group
 
     def __repr__(self):
-        return 'ForNode({!r}, {!r}, {!r})'.format(self.item, self.sequence, self.for_group, self.empty_group)
+        return 'ForNode({!r}, {!r}, {!r})'.format(self.item_tuple, self.sequence, self.for_group, self.empty_group)
 
     def eval(self, context):
         content = ""
@@ -123,15 +129,20 @@ class ForNode:
             iterable = context[self.sequence]
         except KeyError:
             raise TemplateError('could not parse for tag, iterable {} not in context'.format(self.sequence))
-        try:
-            iter(iterable)
-        except TypeError:
-            raise TemplateError('{} is not iterable'.format(self.sequence))
+        test_iterability(iterable)
         looped = False
         for element in iterable:
             looped = True
             current_context = context.copy()
-            current_context[self.item] = element
+            if len(self.item_tuple) > 1:
+                # Attempt to unpack.
+                test_iterability(element)
+                if len(self.item_tuple) != len(element):
+                    raise TemplateError('cannot unpack {!r} into {}'.format(element, self.item_tuple))
+                for index, value in enumerate(element):
+                    current_context[self.item_tuple[index]] = value
+            else:
+                current_context[self.item_tuple[0]] = element
             content += self.for_group.eval(current_context)
         if not looped:
             content += self.empty_group.eval(context)
@@ -172,7 +183,7 @@ class Parser:
     def parse(self):
         node = self._parse_group()
         if not self.is_finished():
-            raise TemplateError('Extra content found at end of input!')
+            raise TemplateError('extra content found at end of input!')
         return node
 
     def _parse_group(self, terminal_tag=None):
@@ -274,13 +285,26 @@ class Parser:
 
     def _parse_for(self):
         self._consume_whitespace()
-        item = self._read_to(' ', 'for')
+        first_item = ""
+        while self.peek() not in [" ", ","]:
+            if self.peek() is None:
+                raise TemplateError('found end of file while attempting to parse for tag')
+            first_item += self.peek()
+            self.next()
         self._consume_whitespace()
-        if not self.try_consume('in '):
-            raise TemplateError('expected\'in \' after {}'.format(item))
+        item_list = [first_item]
+        while not self.try_consume('in '):
+            # either another value to unpack or malformed tag
+            if self.try_consume(','):
+                self._consume_whitespace()
+                thingy = self._read_to(' ', 'for')
+                item_list.append(thingy)
+                self._consume_whitespace()
+            else:
+                raise TemplateError('expected \'in \' in for tag')
         sequence = self._read_to("%}", "for").strip()
         for_group, empty_group = self._parse_else_or_empty_group('endfor')
-        return ForNode(item, sequence, for_group, empty_group)
+        return ForNode(tuple(item_list), sequence, for_group, empty_group)
 
     def _parse_text(self):
         content = ""
