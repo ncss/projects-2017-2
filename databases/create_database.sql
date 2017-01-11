@@ -28,17 +28,24 @@ CREATE TABLE comments (
 	--FOREIGN KEY(image_id) REFERENCES images(id)
 );
 
-CREATE TABLE categories (
-	id INTEGER PRIMARY KEY AUTOINCREMENT,
-	name TEXT -- category name
-);
+-- CREATE TABLE categories (
+-- 	id INTEGER PRIMARY KEY AUTOINCREMENT,
+-- 	name TEXT -- category name
+-- );
 
-CREATE TABLE imagecategories (
-	id INTEGER PRIMARY KEY AUTOINCREMENT,
-	category_id INT,
-	image_id INT,
-	FOREIGN KEY(category_id) REFERENCES categories(id),
-	FOREIGN KEY(image_id) REFERENCES comments(id) -- image ids are tied to comment ids
+-- CREATE TABLE imagecategories (
+-- 	id INTEGER PRIMARY KEY AUTOINCREMENT,
+-- 	category_id INT,
+-- 	image_id INT,
+-- 	FOREIGN KEY(category_id) REFERENCES categories(id),
+-- 	FOREIGN KEY(image_id) REFERENCES comments(id) -- image ids are tied to comment ids
+-- );
+
+CREATE TABLE categorylink (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  category_name TEXT,
+  comment_id INT,
+  FOREIGN KEY(comment_id) REFERENCES comments(id)
 );
 
 CREATE TABLE votes (
