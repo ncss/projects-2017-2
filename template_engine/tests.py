@@ -75,8 +75,24 @@ assert throws('{% ifvalue %}this{% endif %} and/or this', {'value': None}),'no s
 
 assert throws("{% include'helloworld.txt' %}", {}), 'no space after include should fail'
 
-assert_renders('{% for a in b%}s:{{a}}:e{%endfor%}', {'b': [1,2,3]}, 's:1:es:2:es:3:e')
+assert_renders('{% for a in b%}s:{{a}}:e{%endfor%}', {'b': [1, 2, 3]}, 's:1:es:2:es:3:e')
 
-assert throws('{% fora in b%}s:{{a}}:e{%endfor%}', {'b': [1,2,3]}), 'no space after for should fail'
+assert throws('{% fora in b%}s:{{a}}:e{%endfor%}', {'b': [1, 2, 3]}), 'no space after for should fail'
 
 assert_renders('{% for a in b%}{{a}}{%endfor%}', {'b': (c for c in 'abc')}, 'abc')
+
+assert_renders('{% for a in b%}{{a}}{% for c in d%}{{c}}{%endfor%}{%endfor%}', {'b': [1, 2], 'd': [3, 4]}, '134234')
+
+assert_renders('{% for a in b%}{{a}}{% for a in b%}{{a}}{%endfor%}{%endfor%}', {'b': [1, 2]}, '112212')
+
+assert_renders(
+    '{% if True %}this{% if True %}that{% endif %}stuff{% endif %}things',
+    {},
+    'thisthatstuffthings'
+)
+
+assert_renders('{% if value %}this{% else %}that{% endif %} yay', {'value': False}, 'that yay')
+
+assert_renders('abc {% if value %}this{% else %}that{% endif %} yay', {'value': True}, 'abc this yay')
+
+assert throws('abc {% if value %}this{% else %} {%else%} that{% endif %} yay', {'value': True})
