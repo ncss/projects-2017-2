@@ -26,6 +26,24 @@ class OriginalPost(BasicInfo):
             original_post.append(OriginalPost(p,*a))
         return original_post
 
+    @staticmethod
+    def get_posts_by_user(sql, username, skip=0):
+        sql.execute('''
+        SELECT *
+        FROM comments
+        INNER JOIN profiles
+            ON profiles.id = comments.user_id
+        WHERE reply_id IS NULL
+            AND username = ?
+        ORDER BY date;''', (username,))
+
+        results = sql.fetchall()[skip:]
+        original_post = []
+        for a in results:
+            p = Profiles.from_id(sql,a[1])
+            original_post.append(OriginalPost(p,*a))
+        return original_post
+
     def get_replies(self, sql):
         sql.execute('''
         SELECT *

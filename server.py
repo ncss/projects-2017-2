@@ -35,7 +35,11 @@ def is_valid_username(username):
 
 def user_get_account(response):
     loggedin = get_loggedin(response)
-    template = render_file('templates/account.html', {'login': loggedin})
+    images = [
+        (p.get_image_path(), p.id)
+        for p in OriginalPost.get_posts_by_user(db, loggedin)
+    ]
+    template = render_file('templates/account.html', {'login': loggedin, 'images': images})
     response.write(template)
     #else:
     #    response.redirect('/user/login')

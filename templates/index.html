@@ -1,7 +1,7 @@
 {% include 'templates/header.html' %}
 <div id="image-wall">
     {% for cur_post in images %}
-       <a href="/photo/view/{{ cur_post[1] }}" > <img src="{{ cur_post[0] }}" class="wallphoto"></a>
+       <a href="/photo/view/{{ cur_post[1] }}" > <img src="/{{ cur_post[0] }}" class="wallphoto"></a>
     {% empty %}
         <p>No images yet. You can upload one.</p>
     {% endfor %}
