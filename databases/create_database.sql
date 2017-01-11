@@ -25,7 +25,7 @@ CREATE TABLE comments (
 	date DATETIME DEFAULT (DATETIME('NOW')),
 	FOREIGN KEY(user_id) REFERENCES profiles(id),
 	FOREIGN KEY(reply_id) REFERENCES comments(id),
-	FOREIGN KEY(image_id) REFERENCES images(id)
+	--FOREIGN KEY(image_id) REFERENCES images(id)
 );
 
 CREATE TABLE categories (
@@ -38,7 +38,7 @@ CREATE TABLE imagecategories (
 	category_id INT,
 	image_id INT,
 	FOREIGN KEY(category_id) REFERENCES categories(id),
-	FOREIGN KEY(image_id) REFERENCES images(id)
+	FOREIGN KEY(image_id) REFERENCES comments(id)
 );
 
 CREATE TABLE votes (
