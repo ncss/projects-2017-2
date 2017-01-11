@@ -13,15 +13,13 @@
         <a href="/"><img src="/static/images/logo.png"/></a>
     </div>
     <div id="headermenu">
-        <p>
-            {% if login %}
-            <a href="/user/account" class="headerbutton">Account <i class="fa fa-user" aria-hidden="true"></i></a>
-            <a href="/user/logout" class="headerbutton">Logout <i class="fa fa-lock" aria-hidden="true"></i></a>
-            {% else %}
-            <a href="/user/login" class="headerbutton">Login <i class="fa fa-lock" aria-hidden="true"></i></a>
-            <a href="/user/register" class="headerbutton">Register <i class="fa fa-user" aria-hidden="true"></i></a>
-            {% endif %}
-        </p>
+        {% if login %}
+        <a href="/user/account" class="headerbutton">Account <i class="fa fa-user" aria-hidden="true"></i></a>
+        <a href="/user/logout" class="headerbutton">Logout <i class="fa fa-lock" aria-hidden="true"></i></a>
+        {% else %}
+        <a href="/user/login" class="headerbutton">Login <i class="fa fa-lock" aria-hidden="true"></i></a>
+        <a href="/user/register" class="headerbutton">Register <i class="fa fa-user" aria-hidden="true"></i></a>
+        {% endif %}
     </div>
 </div>
 <div id="main" class="row">
@@ -30,19 +28,19 @@
         <h2 id="categories">Categories</h2>
         <ul>
             <li>
-                <p><a href="landscape.html">Landscape</a></p>
+                <p><a href="/category/display/landscape">Landscape</a></p>
             </li>
             <li>
-                <p><a href="figure.html">Figure</a></p>
+                <p><a href="/category/display/figure">Figure</a></p>
             </li>
             <li>
-                <p><a href="stilllife.html">Still Life</a></p>
+                <p><a href="/category/display/stilllife">Still Life</a></p>
             </li>
             <li>
-                <p><a href="patterns.html">Patterns</a></p>
+                <p><a href="/category/display/patterns">Patterns</a></p>
             </li>
             <li>
-                <p><a href="architecture.html">Architecture</a></p>
+                <p><a href="/category/display/architecture">Architecture</a></p>
             </li>
         </ul>
     </div>

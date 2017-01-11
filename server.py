@@ -4,8 +4,17 @@ from databases import OriginalPost
 from databases import Response
 from tornado.ncss import Server
 from template_engine.__init__ import render_file
+from tornado.web import HTTPError
 import re
 import os
+
+CATEGORIES = [
+    "landscape",
+    "figure",
+    "stilllife",
+    "patterns",
+    "architecture"
+]
 
 db = Database('databases/data.db')
 if not os.path.isdir('static/images'):
@@ -93,15 +102,15 @@ def user_get_logout(response):
     response.clear_cookie('username')
     response.redirect("/")
 
-def category_get_selection(response):
-    template = render_file('templates/category.html', {'login': get_loggedin(response)})
-    response.write(template)
-
-
-def category_post_selection(response):
-    category = response.get_field('category')
-    template = render_file('templates/category.html', {'category': category, 'login': get_loggedin(response)})
-    response.write(template)
+# def category_get_selection(response):
+#     template = render_file('templates/category.html', {'login': get_loggedin(response)})
+#     response.write(template)
+#
+#
+# def category_post_selection(response):
+#     category = response.get_field('category')
+#     template = render_file('templates/category.html', {'category': category, 'login': get_loggedin(response)})
+#     response.write(template)
 
 
 def see_photo_and_response(response,post_id):
@@ -115,7 +124,12 @@ def see_photo_and_response(response,post_id):
 
 def image_get_upload(response):
     username = response.get_secure_cookie('username')
-    template = render_file('templates/uploadphotos.html', {'message': '', 'login':username})
+    context = {
+        'message': '',
+        'login':username,
+        'categories': CATEGORIES,
+    }
+    template = render_file('templates/uploadphotos.html', context)
     response.write(template)
 
 def image_post_upload(response):
@@ -125,20 +139,27 @@ def image_post_upload(response):
     content = response.get_field('content')
     username = response.get_secure_cookie('username')
     if not username:
-        template = render_file('templates/uploadphotos.html', {'message': 'You need to Log in first', 'login':username})
+        template = render_file('templates/uploadphotos.html', {'message': 'You need to Log in first', 'login':username, 'categories': CATEGORIES})
         response.write(template)
     else:
         username = username.decode()
         post = OriginalPost.create(db, Profiles.from_user(db, username).id, content)
-        print(post)
+        #print(post)
+        post_categories = []
+        for category in CATEGORIES:
+            if response.get_field(category):
+                post_categories.append(category)
+        print(post_categories)
+        OriginalPost.make_category_links(db, post.id, post_categories)
         path = "static/images/" + str(post.id) + "." + file_extension
         with open(path, "wb") as file:
             file.write(image)
         response.redirect("/")
 
+
 def response_get_upload(response, post_id):
     username = response.get_secure_cookie('username')
-    template = render_file('templates/uploadphotos.html', {'message': '', 'login': username})
+    template = render_file('templates/uploadphotos.html', {'message': '', 'login': username, 'categories':CATEGORIES})
     response.write(template)
 
 
@@ -161,15 +182,31 @@ def response_post_upload(response, post_id):
             file.write(image)
         response.redirect("/")
 
+def display_category(response, category):
+    """
+    Nice functions are nice.
+    """
+    if not category in CATEGORIES:
+        return response.redirect('/')
+    context = {
+        "images": [(p.get_image_path(), p.id) for p in OriginalPost.get_posts_with_category(db, category)],
+        "cur_post": None,
+        "login": get_loggedin(response),
+        "category": category.title(),
+    }
+    return response.write(render_file('templates/category.html', context))
+
+
 server = Server()
 server.register("/", index)
 server.register(r'/user/account', user_get_account)
 server.register('/user/login', user_get_login, post=user_post_login)
 server.register('/user/register', user_get_register, post=user_post_register)
 server.register('/user/logout' , user_get_logout)
-server.register("/category/selection", category_get_selection, post=category_post_selection)
 server.register('/photo/view/(\w+)', see_photo_and_response)
 server.register('/photo/upload', image_get_upload, post=image_post_upload)
 server.register('/photo/response/upload/(\w+)', response_get_upload , post = response_post_upload)
+# server.register("/category/selection", category_get_selection, post=category_post_selection)
+server.register('/category/display/(\w+)', display_category)
 
 server.run()
