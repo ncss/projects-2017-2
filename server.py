@@ -1,8 +1,10 @@
-from databases.Profiles import Profiles
+from databases import Profiles
+from databases import Database
 from tornado.ncss import Server
 from template_engine.__init__ import render_file
 import re
 
+db = Database('databases/data.db')
 
 def index(response):
     loggedin = response.get_secure_cookie('username')
@@ -29,7 +31,7 @@ def user_get_account(response, username):
 
 def confirm_login_redirect(response, username, password):
     try:
-        Profiles.login(username, password)
+        Profiles.login(db, username, password)
         response.set_secure_cookie('username', username)
         response.redirect('/')
         print('Logging in as ' + username)
@@ -50,7 +52,7 @@ def user_post_login(response):
     if is_valid_username(username) and password.strip() != '':
         confirm_login_redirect(response, username, password)
     else:
-        template = render_file('templates/login.html', {'message': 'Ha ha!\nIncorrect login details.'})
+        template = render_file('templates/login.html', {'message': 'Incorrect login details.'})
         response.write(template)
 
 
@@ -66,7 +68,7 @@ def user_post_register(response):
 
     if is_valid_username(username) and password.strip() != '':
         try:
-            Profiles.register(username, password, email)
+            Profiles.register(db, username, password, email)
             confirm_login_redirect(response, username, password)
         except ValueError as error:
             template = render_file('templates/register.html', {'message': error})
