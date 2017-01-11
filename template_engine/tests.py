@@ -95,4 +95,13 @@ assert_renders('{% if value %}this{% else %}that{% endif %} yay', {'value': Fals
 
 assert_renders('abc {% if value %}this{% else %}that{% endif %} yay', {'value': True}, 'abc this yay')
 
-assert throws('abc {% if value %}this{% else %} {%else%} that{% endif %} yay', {'value': True})
+assert throws('abc {% if value %}this{% else %} {%else%} that{% endif %} yay', {'value': True}),\
+    'else outside of if should fail'
+
+assert_renders(
+    'this {% for a in b %} {{a}} {% empty %} that {% endfor %} and the other.',
+    {"b": []},
+    'this  that  and the other.'
+)
+
+assert throws('not in a for --> {% empty %}', {}), 'empty tag outside of for should fail'
