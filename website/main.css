@@ -31,7 +31,7 @@ body {
 }
 
 #nav {
-    verical-align: top;
+    vertical-align: top;
     display: inline-block;
     background-color: rgb(255, 224, 178);
     width: 175px;
