@@ -1,14 +1,19 @@
 {% include 'templates/header.html' %}
-<h1>Upload Photo</h1><br>
-<br>
-<form action="/save_file" method=post" enctype="multipart/form-data">
-    <input type="file" name="attachment">
+
+<form method="POST" enctype="multipart/form-data">
+    {% if login %}
+        <input type="file" name="upload" >
+        <br/>
+        <textarea name ="content">Request</textarea>
+        <input type="submit" value="upload">
+    {% else %}
+         <h3>You need to Log in First</h3>
+    {% endif %}
+
 </form><br>
 <p>Caption your photo</p>
 
 <textarea>Caption & Request</textarea>
 <br><br>
-
-<p><input type="submit" value="Upload"></p>
 
 {% include 'templates/footer.html' %}

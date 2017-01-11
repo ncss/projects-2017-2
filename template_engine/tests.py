@@ -75,8 +75,76 @@ assert throws('{% ifvalue %}this{% endif %} and/or this', {'value': None}),'no s
 
 assert throws("{% include'helloworld.txt' %}", {}), 'no space after include should fail'
 
-assert_renders('{% for a in b%}s:{{a}}:e{%endfor%}', {'b': [1,2,3]}, 's:1:es:2:es:3:e')
+assert_renders('{% for a in b%}s:{{a}}:e{%endfor%}', {'b': [1, 2, 3]}, 's:1:es:2:es:3:e')
 
-assert throws('{% fora in b%}s:{{a}}:e{%endfor%}', {'b': [1,2,3]}), 'no space after for should fail'
+assert throws('{% fora in b%}s:{{a}}:e{%endfor%}', {'b': [1, 2, 3]}), 'no space after for should fail'
 
 assert_renders('{% for a in b%}{{a}}{%endfor%}', {'b': (c for c in 'abc')}, 'abc')
+
+assert_renders('{% for a in b%}{{a}}{% for c in d%}{{c}}{%endfor%}{%endfor%}', {'b': [1, 2], 'd': [3, 4]}, '134234')
+
+assert_renders('{% for a in b%}{{a}}{% for a in b%}{{a}}{%endfor%}{%endfor%}', {'b': [1, 2]}, '112212')
+
+assert_renders(
+    '{% if True %}this{% if True %}that{% endif %}stuff{% endif %}things',
+    {},
+    'thisthatstuffthings'
+)
+
+assert_renders('{% if value %}this{% else %}that{% endif %} yay', {'value': False}, 'that yay')
+
+assert_renders('abc {% if value %}this{% else %}that{% endif %} yay', {'value': True}, 'abc this yay')
+
+assert throws('abc {% if value %}this{% else %} {%else%} that{% endif %} yay', {'value': True}),\
+    'else outside of if should fail'
+
+assert_renders(
+    'this {% for a in b %} {{a}} {% empty %} that {% endfor %} and the other.',
+    {"b": []},
+    'this  that  and the other.'
+)
+
+assert throws('not in a for --> {% empty %}', {}), 'empty tag outside of for should fail'
+
+assert_renders(
+    'this {% for a in b %} {{a}} {% empty %} that {% endfor %} and the other.',
+    {"b": [1, 2]},
+    'this  1  2  and the other.'
+)
+
+assert_renders('{% safe value %}', {'value': '<html>'}, "<html>")
+
+assert_renders('{%        safe value%}', {'value': '<html>'}, "<html>")
+
+assert_renders(
+    '{%safe value %}',
+    {'value': template_engine.GroupNode},
+    '<class \'template_engine.GroupNode\'>'
+)
+
+assert throws('{%safevalue%}', {'value': '<html>'}), 'no space after safe should fail'
+
+assert_renders('{% comment %}asfgasdfasdfa{% endcomment %}', {}, '')
+
+assert_renders('{%comment%}{% asdfasdfasdf %}{%endcomment         %}', {}, '')
+
+assert_renders('start{%comment%}{% asdfasdfasdf %}{%endcomment%}end', {}, 'startend')
+
+assert_renders('{%comment%}{% if True %}chicken{%endif%}{%endcomment%}', {}, '')
+
+assert throws('{%comment%}{% if True %}chicken{%endcomment%}{%endif%}', {}), 'tags should be invalid inside comment'
+
+assert throws('{% if True %}{%comment%}chicken{%endif%}{%endcomment%}', {}), 'tags should be invalid inside comment'
+
+assert_renders(
+    'this {% for a, b in c %} {{a}}:{{b}} {% empty %} that {% endfor %} and the other.',
+    {"c": {1: "one", 2: "two"}.items()},
+    'this  1:one  2:two  and the other.'
+)
+
+assert throws('{% for a, in b %} {{a}} {% endfor %}', {'b': [1, 2]}), 'comma followed only by in should fail'
+
+assert throws('{% for a, b in c %} {{a}} {% endfor %}', {'c': [(1, 2, 3), (4, 5, 6)]}),\
+    'incorrect number of tuples to unpack should fail'
+
+assert_renders('{% for a in b %} {{a}} {% endfor %}', {'b': []}, '')
