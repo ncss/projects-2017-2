@@ -1,9 +1,24 @@
 import sqlite3
-
+import os
+from databases.profiles import Profiles
 class Database:
     def __init__(self,filepath):
         #Create a connection to the database file
         #Store it in a state E.G self.connection
+
+        if not os.path.exists(filepath):
+            conn = sqlite3.connect(filepath)
+            cursor = conn.cursor()
+
+            cursor.executescript(open("databases/create_database.sql").read())
+            cursor.executescript(open("databases/mock_data.sql").read())
+
+            # Hash all of the passwords
+            for r in cursor.execute("SELECT id,password FROM profiles;").fetchall():
+                conn.execute("UPDATE profiles SET password = ? WHERE id = ?;", (Profiles._hash(r[1]), r[0]))
+
+            conn.commit()
+            conn.close()
         self.conn = sqlite3.connect(filepath)
         self.cur  = self.conn.cursor()
 
