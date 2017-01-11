@@ -1,11 +1,14 @@
 from databases import Profiles
 from databases import Database
+from databases import OriginalPost
 from tornado.ncss import Server
 from template_engine.__init__ import render_file
-from databases import OriginalPost
 import re
+import os
 
 db = Database('databases/data.db')
+if not os.path.isdir('static/images'):
+    os.mkdir('static/images')
 
 def get_loggedin(response):
     loggedin = response.get_secure_cookie('username')
@@ -13,7 +16,8 @@ def get_loggedin(response):
         return loggedin.decode('UTF8')
 
 def index(response):
-    template = render_file('templates/index.html', {"login": get_loggedin(response)})
+
+    template = render_file('templates/index.html', {"images": [p.get_image_path() for p in OriginalPost.get_posts(db)], "cur_post": None, "login": get_loggedin(response)})
     response.write(template)
 
 def is_valid_email(email):
@@ -121,11 +125,10 @@ def image_post_upload(response):
         username = username.decode()
         post = OriginalPost.create(db, Profiles.from_user(db, username).id, content)
         print(post)
-        path = "static/" + str(post.id) + "." + file_extension
+        path = "static/images/" + str(post.id) + "." + file_extension
         with open(path, "wb") as file:
             file.write(image)
         response.redirect("/")
-
 
 server = Server()
 server.register("/", index)
