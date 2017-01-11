@@ -74,6 +74,7 @@ def category_post_selection(response):
     template = render_file('templates/category.html', {'category': category})
     response.write(template)
 
+
 def image_get_upload(response):
     template = render_file('templates/mock_upload.html', {})
     response.write(template)
@@ -81,15 +82,13 @@ def image_get_upload(response):
 
 def image_post_upload(response):
     f = response.get_file('upload')
-    if f[0] == None:
-        response.write('File not found.')
-    else:
-        template = render_file('templates/mock_upload.html', {})
-        response.write(template)
-        nf = open ('uploads/' + f[0],"wb+")
-            # write to file
-        nf.write(f[2])
-        nf.close()
+    file_extension = str(f[0]).split('.')[-1]
+    file = f[2] #Bytes
+    content = response.get_field('content')
+    username = response.get_secure_cookie('username')
+    if username is None:
+        response.write('Not Logged ')
+    OriginalPost.create(db, Profiles.from_user(username).id, file, file_extension, content)
 
 
 server = Server()
