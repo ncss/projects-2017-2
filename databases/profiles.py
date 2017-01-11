@@ -44,7 +44,7 @@ class Profiles(object):
         if sql.execute("SELECT * FROM profiles WHERE email=? LIMIT 1;", (email,)).fetchone():
             raise ValueError("Registration error: Email {} is already used.".format(email))
 
-        pkid = sql.execute("INSERT INTO profiles VALUES (?,?,?)", (username,cls._hash(password),email)).lastrowid()
+        pkid = sql.execute("INSERT INTO profiles (username, password, email) VALUES (?,?,?)", (username,cls._hash(password),email)).lastrowid
         sql.commit()
 
         return cls(pkid, username, cls._hash(password), email)
