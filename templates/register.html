@@ -3,7 +3,10 @@
 <h1>
     Create Account
 </h1>
-<form  method="post"><br>
+{% if message %}
+<p id="message">{{message}}</p>
+{% endif %}
+<form id="register" method="post"><br>
   Create Username:<br>
     <input type="text" name="username"/><br><br>
   Create Password:<br>
@@ -16,6 +19,5 @@
 Already have an account?
 <a href="/user/login">Login</a>
 
-{{message}}
 
 {% include 'templates/footer.html' %}

@@ -178,3 +178,12 @@ input[type="submit"]{
 #maincontent h1 {
     font-size: 32px;
 }
+
+#login,#register {
+    margin-top: 30px;
+}
+
+#message {
+    margin-top: 30px;
+    color: red;
+}
