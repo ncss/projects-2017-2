@@ -99,7 +99,6 @@ def image_get_upload(response):
     template = render_file('templates/uploadphotos.html', {'message': '', 'loged_in':username})
     response.write(template)
 
-
 def image_post_upload(response):
     f = response.get_file('upload')
     file_extension = str(f[0]).split('.')[-1]
@@ -117,7 +116,6 @@ def image_post_upload(response):
         with open(path, "wb") as file:
             file.write(image)
         response.redirect("/")
-
 
 server = Server()
 server.register("/", index)

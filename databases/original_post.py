@@ -32,9 +32,10 @@ class OriginalPost(BasicInfo):
         pkid = sql.lastrowid
         sql.commit()
 
-        date = sql.execute('''
+        sql.execute('''
         SELECT date
         FROM comments
-        WHERE id=?''',(pkid,)).fetchone()[0]
+        WHERE id=?''',(pkid,))
+        date = sql.fetchone()[0]
         print(pkid,user_id,None,contents,date)
         return cls(pkid,user_id,None,contents,date)
