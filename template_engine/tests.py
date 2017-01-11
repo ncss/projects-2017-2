@@ -135,3 +135,14 @@ assert_renders('{%comment%}{% if True %}chicken{%endif%}{%endcomment%}', {}, '')
 assert throws('{%comment%}{% if True %}chicken{%endcomment%}{%endif%}', {}), 'tags should be invalid inside comment'
 
 assert throws('{% if True %}{%comment%}chicken{%endif%}{%endcomment%}', {}), 'tags should be invalid inside comment'
+
+assert_renders(
+    'this {% for a, b in c %} {{a}}:{{b}} {% empty %} that {% endfor %} and the other.',
+    {"c": {1: "one", 2: "two"}.items()},
+    'this  1:one  2:two  and the other.'
+)
+
+assert throws('{% for a, in b %} {{a}} {% endfor %}', {'b': [1, 2]}), 'comma followed only by in should fail'
+
+assert throws('{% for a, b in c %} {{a}} {% endfor %}', {'c': [(1, 2, 3), (4, 5, 6)]}),\
+    'incorrect number of tuples to unpack should fail'
