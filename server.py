@@ -41,14 +41,16 @@ def confirm_login_redirect(response, username, password):
         Profiles.login(db, username, password)
         response.set_secure_cookie('username', username)
         response.redirect('/')
-        print('Logging in as ' + username)
     except ValueError as error:
-        print(error)
-        template = render_file('templates/login.html', {'message': error, 'login': get_loggedin(response)})
+        template = render_file('templates/login.html', {'message': error,
+                                                        'login': get_loggedin(response),
+                                                        'username': username})
         response.write(template)
 
 def user_get_login(response):
-    template = render_file('templates/login.html', {'message': '', 'login': get_loggedin(response)})
+    template = render_file('templates/login.html', {'message': '',
+                                                    'login': get_loggedin(response),
+                                                    'username': ''})
     response.write(template)
 
 
@@ -59,12 +61,20 @@ def user_post_login(response):
     if is_valid_username(username) and password.strip() != '':
         confirm_login_redirect(response, username, password)
     else:
-        template = render_file('templates/login.html', {'message': 'Incorrect login details.', 'login': get_loggedin(response)})
+        template = render_file('templates/login.html', {'message': 'Incorrect login details.',
+                                                        'login': get_loggedin(response),
+                                                         'username': username})
         response.write(template)
 
 
 def user_get_register(response):
-    template = render_file('templates/register.html', {'message': '', 'login': get_loggedin(response)})
+    username = response.get_field('username')
+    email = response.get_field('email')
+
+    template = render_file('templates/register.html', {'message': '',
+                                                       'login': get_loggedin(response),
+                                                       'username': '',
+                                                       'email': ''})
     response.write(template)
 
 
@@ -81,7 +91,10 @@ def user_post_register(response):
             template = render_file('templates/register.html', {'message': error, 'login': get_loggedin(response)})
             response.write(template)
     else:
-        template = render_file('templates/register.html', {'message': 'Invalid Username or Password', 'login': get_loggedin(response)})
+        template = render_file('templates/register.html', {'message': 'Invalid username or password. Please try again.',
+                                                           'login': get_loggedin(response),
+                                                           'username': username,
+                                                           'email': email})
         response.write(template)
 
 def user_get_logout(response):
@@ -98,10 +111,10 @@ def category_post_selection(response):
     template = render_file('templates/category.html', {'category': category, 'login': get_loggedin(response)})
     response.write(template)
 
-def see_photo_and_response(response):
-    template = render_file('templates/sketchresponse.html', {})
+#TODO images
+def see_photo_and_response(response, image_ids):
+    template = render_file('templates/sketchresponse.html', {'login': get_loggedin(response)})
     response.write(template)
-
 
 def image_get_upload(response):
     username = response.get_secure_cookie('username')
